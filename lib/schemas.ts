@@ -13,7 +13,7 @@ export const SignUpSchmea = z.object({
 
 
 export const sessionSchema = z.object({
-  id:z.number(),
+  id:z.string(),
   role:z.string(),
   expiresAt:z.date(),
 })

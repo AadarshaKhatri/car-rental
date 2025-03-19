@@ -45,7 +45,7 @@ export async function SignIn (prevState:PrevState,formData : FormData) : Promise
         message:null,
       }
     }else{
-      await createSession(Number(FoundUser.id),FoundUser.role)
+      await createSession(FoundUser.id,FoundUser.role)
  
     }
   }catch(error){
@@ -57,7 +57,7 @@ export async function SignIn (prevState:PrevState,formData : FormData) : Promise
     }
   }
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/private");
 }
 
 
@@ -105,7 +105,7 @@ export async function SignUp(prevState: PrevState,formData:FormData) : Promise<P
       message:null,
     }
   }else{
-  await createSession(Number(user.id),user.role);
+  await createSession(user.id,user.role);
   }
   }catch(error){
     return { 
@@ -115,5 +115,5 @@ export async function SignUp(prevState: PrevState,formData:FormData) : Promise<P
     }
   }
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/private");
 }

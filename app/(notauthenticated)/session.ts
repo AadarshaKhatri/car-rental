@@ -31,7 +31,7 @@ export async function decrypt(session: string | undefined = '') {
 }
 
 
-export async function createSession(id:number, role:string) {
+export async function createSession(id:string, role:string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const session = await encrypt({ id,role,expiresAt})
   const cookieStore = await cookies()
@@ -57,11 +57,10 @@ export async function deleteSession() {
 export const verifySession = cache(async () => {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
- 
-  if (!session?.userId) {
+  if (!session?.id) {
     redirect('/login')
   }
-  return { role:session.role, userId: session.userId }
+  return { role:session?.role, userId: session?.userId }
 })
 
 
@@ -70,15 +69,13 @@ export const getUser = cache(async () => {
   if (!session) return null
  
   try {
-    const data = await prisma.user_model.findMany({
+    const data = await prisma.user_model.findUnique({
       where: {
-        id:session.userId,
+        id:String(session?.userId),
       }
       
     })
- 
-    const user = data[0]
-    return user
+    return data
   } catch  {
     console.log('Failed to fetch user')
     return null
