@@ -70,7 +70,7 @@ export const getUser = cache(async () => {
   if (!session) return null
  
   try {
-    const data = await prisma.user.findMany({
+    const data = await prisma.user_model.findMany({
       where: {
         id:session.userId,
       }

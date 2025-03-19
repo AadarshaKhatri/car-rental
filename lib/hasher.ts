@@ -5,5 +5,6 @@ export async function hashpassword(inputpassword:string) : Promise<string>{
 }
 
 export async function verifyPassword(inputpassword:string,db_password:string) : Promise<boolean>{
-  return bcrypt.compare(inputpassword,db_password);
+  const msg= bcrypt.compare(inputpassword,db_password);
+  return msg
 }

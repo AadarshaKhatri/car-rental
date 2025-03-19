@@ -4,10 +4,26 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Input } from "@/components/ui/input"
 import { Label } from "@radix-ui/react-label"
 import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import { useActionState, useEffect } from "react";
+import { SignIn } from "../action/action";
+import { toast } from "sonner";
 
 
 
 const SignInForm = () => {
+  const [state,SignInAction] = useActionState(SignIn,undefined);
+  useEffect(() => {
+    if (state) {
+      if (state?.error) {
+        console.log(state.message);
+        toast.error(state?.error); 
+      }
+      if (state?.message && !state?.error) {
+        toast.success(state?.message); 
+      }
+    }
+  }, [state]);
   return (
     <section className="container max-w-full mx-auto">
     <div className="w-full min-h-screen flex flex-col justify-center items-center">
@@ -24,8 +40,7 @@ const SignInForm = () => {
           Or
         </CardHeader>
       </div>
-      <form>
-
+      <form action={SignInAction}>
         {/* Email */}
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5">
@@ -47,11 +62,15 @@ const SignInForm = () => {
         
           </div>
         </div>
-      </form>
-    </CardContent>
+      <div className="py-3 pb-4 w-full text-center">
+        <p className="text-sm text-white">Don&apos; have an account? <Link href="/signup">Sign Up</Link></p>
+      </div>
     <CardFooter className="flex justify-center">
-      <Button>Login</Button>
+      <Button type="submit">Login</Button>
     </CardFooter>
+      </form>
+
+    </CardContent>
   </Card>
         </div>
     </div>
