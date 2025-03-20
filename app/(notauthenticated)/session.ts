@@ -4,7 +4,6 @@ import { sessionSchema } from '@/lib/schemas'
 import { z } from 'zod'
 import { cookies } from 'next/headers'
 import { cache } from 'react'
-import { redirect } from 'next/navigation'
 import prisma from '@/lib/prisma'
 
 
@@ -21,12 +20,16 @@ export async function encrypt(payload: z.infer<typeof sessionSchema>) {
  
 export async function decrypt(session: string | undefined = '') {
   try {
-    const { payload } = await jwtVerify(session, encodedKey, {
-      algorithms: ['HS256'],
-    })
-    return payload
+    if(session){
+      const { payload } = await jwtVerify(session, encodedKey, {
+        algorithms: ['HS256'],
+      })
+      return payload
+    }else{
+      return null
+    }
   } catch {
-    console.log('Failed to verify session',)
+   return null
   }
 }
 
@@ -47,20 +50,15 @@ export async function createSession(id:string, role:string) {
 
 
 export async function deleteSession() {
-  const cookieStore = await cookies()
-  cookieStore.delete('session')
+  const cookieStore = await cookies();
+  cookieStore.delete('session'); // Only pass the cookie name
 }
-
-
 
  
 export const verifySession = cache(async () => {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
-  if (!session?.id) {
-    redirect('/login')
-  }
-  return { role:session?.role, userId: session?.userId }
+  return { role:session?.role, userId: session?.id }
 })
 
 

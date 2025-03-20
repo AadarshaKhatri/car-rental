@@ -4,7 +4,7 @@ import { hashpassword, verifyPassword } from "@/lib/hasher";
 import prisma from "@/lib/prisma";
 import { SignInSchema, SignUpSchmea } from "@/lib/schemas"
 import { PrevState } from "@/lib/types";
-import { createSession } from "../session";
+import { createSession, deleteSession } from "../session";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -116,4 +116,11 @@ export async function SignUp(prevState: PrevState,formData:FormData) : Promise<P
   }
   revalidatePath("/", "layout");
   redirect("/private");
+}
+
+
+export async function Logout(){
+  await deleteSession();
+  revalidatePath("/","layout");
+  redirect("/login");
 }
