@@ -2,11 +2,15 @@
 
 import { Logout } from "@/app/(notauthenticated)/action/action";
 import { Button } from "@/components/ui/button";
-import { useActionState } from "react";
+import { ReactNode, useActionState } from "react";
 import { toast } from "sonner";
 
+interface LogoutButtonProps {
+  children: ReactNode;
+}
 
-const LogoutButton = () => {
+
+const LogoutButton = ( {children} : LogoutButtonProps) => {
   const [state,LogoutAction] = useActionState(Logout,undefined);
   if(state){
     toast.success("Logout out!");
@@ -15,7 +19,7 @@ const LogoutButton = () => {
     <section>
       <div>
         <form action={LogoutAction}>
-        <Button className="bg-red-400 text-white">Log Out</Button>
+        <Button className="bg-red-400 text-white hover:bg-red-400/40">{children}</Button>
         </form>
       </div>
     </section>

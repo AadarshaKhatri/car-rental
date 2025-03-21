@@ -4,14 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifySession } from "./app/(notauthenticated)/session";
 
 const publicroutes = ["/","/login","/signup"];
-const privateRoutes = ["/private"]
+const privateRoutes = ["/dashboard/","/carts","/cars"]
 const adminroutes = ["/admin"]
 export async function middleware(req:NextRequest){
-  console.log("MiddleWare Running")
 
     const user = await verifySession();
     if (publicroutes.includes(req.nextUrl.pathname) && user.userId) {
-      return NextResponse.redirect(new URL("/private", req.nextUrl.origin));
+      return NextResponse.redirect(new URL("/dashboard", req.nextUrl.origin));
     }
 
     //Middleware Function to authenticate the user
@@ -41,7 +40,7 @@ async function MiddleWareAuth(req:NextRequest){
 
     }
     if(admin.role !=="admin"){
-      return NextResponse.redirect(new URL("/private", req.nextUrl.origin)); 
+      return NextResponse.redirect(new URL("/dashboard", req.nextUrl.origin)); 
 
     }
   }

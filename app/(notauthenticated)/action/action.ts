@@ -57,7 +57,7 @@ export async function SignIn (prevState:PrevState,formData : FormData) : Promise
     }
   }
   revalidatePath("/", "layout");
-  redirect("/private");
+  redirect("/dashboard");
 }
 
 
@@ -115,7 +115,7 @@ export async function SignUp(prevState: PrevState,formData:FormData) : Promise<P
     }
   }
   revalidatePath("/", "layout");
-  redirect("/private");
+  redirect("/dashboard");
 }
 
 
