@@ -1,6 +1,5 @@
 import LayoutWrapper from "../LayoutWrapper"
 const CarsPage = () => {
-  console.log(LayoutWrapper);
   return (
    
       <LayoutWrapper>

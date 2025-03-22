@@ -49,7 +49,7 @@ const Sidebar = () => {
         </aside>
 
         {/* Logout button at the bottom */}
-        <div className="flex justify-center ">
+        <div className="flex justify-center pb-10">
           <LogoutButton>
             <LogOut className="w-5 h-5 text-white" />
           </LogoutButton>

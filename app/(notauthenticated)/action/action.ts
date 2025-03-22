@@ -11,7 +11,6 @@ import { revalidatePath } from "next/cache";
 
 
 export async function SignIn (prevState:PrevState,formData : FormData) : Promise<PrevState>{
-  console.log("Sign Hit!");
   try{
     const {success,error} = SignInSchema.safeParse({
       email:formData.get("email") as string,
