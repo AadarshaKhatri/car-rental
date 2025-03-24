@@ -9,7 +9,7 @@ const adminroutes = ["/admin"]
 export async function middleware(req:NextRequest){
 
     const user = await verifySession();
-    if (publicroutes.includes(req.nextUrl.pathname) && user.userId) {
+    if (publicroutes.includes(req.nextUrl.pathname) && user.userId && user.role === "USER") {
       return NextResponse.redirect(new URL("/dashboard", req.nextUrl.origin));
     }
 
@@ -39,7 +39,7 @@ async function MiddleWareAuth(req:NextRequest){
       return NextResponse.redirect(new URL("/adminLogin", req.nextUrl.origin)); 
 
     }
-    if(admin.role !=="admin"){
+    if(admin.role !=="ADMIN"){
       return NextResponse.redirect(new URL("/dashboard", req.nextUrl.origin)); 
 
     }

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
-import { Car, Frame, LayoutDashboard, LogOut, ShoppingCart } from "lucide-react"
+import { Car, Frame, LayoutDashboard, LogOut, ShoppingCart, User2Icon } from "lucide-react"
 import LogoutButton from "../LogOut/LogoutButton"
 
 const Sidebar = () => {
@@ -13,6 +13,7 @@ const Sidebar = () => {
     { label: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
     { label: "Cars", url: "/cars", icon: Car },
     { label: "Carts", url: "/carts", icon: ShoppingCart },
+    {label:"Profile", url:"/profile",icon: User2Icon},
   ];
 
   return (
@@ -27,6 +28,15 @@ const Sidebar = () => {
 
         {/* Sidebar Navigation centered in the middle */}
         <aside className="flex flex-col items-center gap-6">
+          {
+            <div className="relative">
+
+               <div className="absolute top-39 right-1 bg-orange-500 w-4 h-4 rounded-full flex justify-center items-center">
+              <p className="text-white text-[9px] font-semibold">10</p>
+              </div>
+            </div>
+
+          }
           {NAVLINKS.map(({ label, url, icon: Icon }, index) => (
             <TooltipProvider key={index}>
               <Tooltip>

@@ -6,9 +6,11 @@ const DashboardPage = () => {
   
   return (
       <LayoutWrapper>
-        <div className="w-full flex flex-col justify-between items-center">
+        <div className="w-full flex flex-col justify-between items-center gap-y-10">
 
-        
+          <div className="w-full h-60  bg-gray-400">
+
+          </div>
           <div className="w-full flex flex-col  justify-start items-start gap-5">
             <h2>Popular Cars</h2>
 

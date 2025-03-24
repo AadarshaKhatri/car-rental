@@ -15,7 +15,7 @@ const LayoutWrapper = ({children}: { children: React.ReactNode }) => {
         </div>
 
         {/*Navigation Bar - Right Side */}
-        <div className="md:pl-20 flex-1 md:mx-10">
+        <div className="pl-30 md:pl-20 flex-1 md:mx-10">
           <div className="flex flex-col justify-center items-center">
             <NavigationBar/>
             {children}
