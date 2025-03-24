@@ -14,7 +14,7 @@ const CarsPage = () => {
   return (
    
       <LayoutWrapper>
-        <div className="w-full">
+        <div className="w-full overflow-hidden">
           <div className=" flex flex-col justify-between items-center">
 
             <div className="w-full flex flex-row justify-between items-center">
@@ -27,7 +27,7 @@ const CarsPage = () => {
                       key={tab}
                       onClick={() => handleTabs(tab)}
                       className={`font-semibold cursor-pointer py-2 px-2 md:px-4 text-lg transition-all duration-100 
-                        ${activeTabs === tab ? "text-white border-b-4 border-primary" : "text-gray-600"}`}
+                        ${activeTabs === tab ? "text-white border-b-4 border-primary bg-muted/40 rounded-t-md " : "text-gray-600"}`}
                     >
                       {tab}
                     </div>
@@ -38,7 +38,7 @@ const CarsPage = () => {
               {/* Add Your Cars  */}
 
               <div>
-                <Button>Add Cars</Button>
+                <Button className="hidden">Add Cars</Button>
               </div>
 
             </div>

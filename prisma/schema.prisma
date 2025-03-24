@@ -8,53 +8,54 @@ datasource db {
 }
 
 model user_model {
-  id        String  @id @default(uuid())
+  id        String         @id @default(uuid())
   name      String
-  email     String  @unique
-  role      UserRoles @default(USER)
+  email     String         @unique
+  role      UserRoles      @default(USER)
   password  String
   posts     post_model[]
   rentals   rental_model[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 }
 
 model post_model {
-  id        String  @id @default(uuid())
+  id        String      @id @default(uuid())
   title     String
   content   String?
-  car      car_model[]
-  user      user_model    @relation(fields: [userId], references: [id])
+  car       car_model[]
+  user      user_model  @relation(fields: [userId], references: [id])
   userId    String
-  createdAt DateTime @default(now())
+  createdAt DateTime    @default(now())
 }
 
 model car_model {
-  id         String  @id @default(uuid())
-  no_sets    Int
-  brand      String
-  year       Int
+  id           String         @id @default(uuid())
+  no_seats     Int
+  brand        String
+  year         Int
   transmission String
-  pricePerDay Float
-  status     CarStatus @default(AVAILABLE)
-  rentals    rental_model[]
-  post       post_model @relation(fields: [postId],references: [id])
-  postId     String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  pricePerDay  Float
+  mileage      Int
+  status       CarStatus      @default(AVAILABLE)
+  rentals      rental_model[]
+  post         post_model?     @relation(fields: [postId], references: [id])
+  postId       String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model rental_model {
-  id         String  @id @default(uuid())
-  user       user_model    @relation(fields: [userId], references: [id])
-  userId     String
-  car        car_model     @relation(fields: [carId], references: [id])
-  carId      String
-  startDate  DateTime
-  endDate    DateTime
-  status     RentalStatus @default(PENDING)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String       @id @default(uuid())
+  user      user_model   @relation(fields: [userId], references: [id])
+  userId    String
+  car       car_model    @relation(fields: [carId], references: [id])
+  carId     String
+  startDate DateTime
+  endDate   DateTime
+  status    RentalStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 enum CarStatus {
@@ -74,4 +75,3 @@ enum UserRoles {
   USER
   ADMIN
 }
-
