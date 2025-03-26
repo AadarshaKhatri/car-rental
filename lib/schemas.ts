@@ -27,3 +27,10 @@ export const CarSchema = z.object({
   transmission:z.string(),
   pricePerDay:z.number().min(0),
 })
+
+export const RentalSchema = z.object({
+  userId:z.string(),
+  carId:z.string(),
+  startDate:z.date(),
+  endDate:z.date()
+})

@@ -13,6 +13,7 @@ model user_model {
   email     String         @unique
   role      UserRoles      @default(USER)
   password  String
+  cars      car_model[]
   posts     post_model[]
   rentals   rental_model[]
   createdAt DateTime       @default(now())
@@ -41,6 +42,8 @@ model car_model {
   rentals      rental_model[]
   post         post_model?     @relation(fields: [postId], references: [id])
   postId       String?
+  user         user_model @relation(fields: [userId],references: [id])
+  userId       String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 }
@@ -67,8 +70,6 @@ enum CarStatus {
 enum RentalStatus {
   PENDING
   APPROVED
-  REJECTED
-  COMPLETED
 }
 
 enum UserRoles {

@@ -1,6 +1,7 @@
 
 import CarsTable from "./components/CarsTable";
 import CreateCarForm from "./components/CreateCarForm";
+import RentCarForm from "./components/RentCarForm";
 
 const YourCars = () => {
   return (
@@ -17,6 +18,19 @@ const YourCars = () => {
           {/* Right Section - Takes Remaining Space */}
           <div className="flex-1 min-w-0 flex flex-col">
             <CreateCarForm />
+          </div>
+        </div>
+
+        {/* Make your car available for rental */}
+        <div className="w-full flex flex-col md:flex-row justify-between items-stretch gap-6 md:px-40">
+          {/* Left Section */}
+          <div className="w-full md:w-[400px] flex flex-col">
+            <h2 className="text-2xl font-semibold text-white">Make your car Available for rent</h2>
+          </div>
+
+          {/* Right Section - Takes Remaining Space */}
+          <div className="flex-1 min-w-0 flex flex-col">
+            <RentCarForm/>
           </div>
         </div>
 

@@ -21,10 +21,8 @@ const CreateCarForm = () => {
 
   useEffect(() => {
     if (state?.success) {
-      toast.success("Car Created!");
-      console.log("Car Created!");
-
-      // Reset the form and transmission state after success
+      toast.success("Car Created!")
+      setTransmission("")
     } else if (state?.error_msg) {
       Object.entries(state.error_msg).forEach(([key,value]) => {
         if(key) return null

@@ -1,9 +1,36 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { CarModel } from "@/lib/types";
+import axios from "axios";
 
-import React from 'react'
+import React, { useActionState, useEffect, useState } from 'react'
+import { deleteCars } from "../../actions/action";
+import { toast } from "sonner";
 
 const CarsTable = () => {
+  const [cars,setCars] = useState<CarModel []>();
+  const [state,carDeleteAction] = useActionState(deleteCars,undefined);
+  useEffect(()=>{
+    if(state?.success){
+      toast.success("Car Deleted Sucessfully!");
+    }
+  },[state])
+
+
+  useEffect(()=>{
+    async function FetchCar(){
+      const data : CarModel [] = await ((await axios.get("/api/getAllUserCars")).data)
+      console.log("User Cars",data);
+      if(!data){
+        return null;
+      }
+      setCars(data);
+    }
+    FetchCar();
+  },[])
+
+
   return (
     <section className='w-full pb-20'>
        <div className="w-full overflow-x-auto">
@@ -20,27 +47,33 @@ const CarsTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow className="border-b  transition">
-                  <TableCell className="table-padding font-medium">1</TableCell>
-                  <TableCell className="table-padding">Aadarsha Khatri</TableCell>
-                  <TableCell className="table-padding">12 points</TableCell>
-                  <TableCell className="table-padding">12</TableCell>
-                  <TableCell className="table-padding">4 events</TableCell>
-                  <TableCell className="table-padding">Rented</TableCell>
-
-                  <TableCell className="table-padding"><Button className="text-white bg-red-400 hover:bg-red-500/50">Delete</Button></TableCell>
-                </TableRow>
-
-                <TableRow className="border-b  transition">
-                  <TableCell className="table-padding font-medium">1</TableCell>
-                  <TableCell className="table-padding">Aadarsha Khatri</TableCell>
-                  <TableCell className="table-padding">12 points</TableCell>
-                  <TableCell className="table-padding">12</TableCell>
-                  <TableCell className="table-padding">4 events</TableCell>
-                  <TableCell className="table-padding">In Progress</TableCell>
-
-                  <TableCell className="table-padding"><Button className="text-white bg-red-400 hover:bg-red-500/50">Delete</Button></TableCell>
-                </TableRow>
+                {
+                  cars === null ? 
+                  <TableRow>
+                    <div className="flex ">
+                      <p className="text-white">No Cars Avaialble!</p>
+                    </div>
+                    </TableRow>
+                  :
+                    cars?.map((car,index)=>(
+  
+                  <TableRow key={car.id} className="border-b  transition">
+                    <TableCell className="table-padding font-medium">{index+1}</TableCell>
+                    <TableCell className="table-padding">{car.brand}</TableCell>
+                    <TableCell className="table-padding">{car.MFD_Date}</TableCell>
+                    <TableCell className="table-padding">{car.transmission}</TableCell>
+                    <TableCell className="table-padding">{car.pricePerDay} per/day</TableCell>
+                    <TableCell className="table-padding">{car.status}</TableCell>
+                    <TableCell className="table-padding">
+                    <form action={carDeleteAction}>
+                      <Input name="carId" className="hidden" defaultValue={car.id}/>
+                      <Button className="text-white bg-red-400 hover:bg-red-500/50">Delete</Button>
+                    </form>
+                    </TableCell>
+                  </TableRow>
+                    ))
+                  
+                }
               </TableBody>
             </Table>
           </div>

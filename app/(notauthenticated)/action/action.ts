@@ -36,7 +36,6 @@ export async function SignIn (prevState:PrevState,formData : FormData) : Promise
       }
     }
     const isPasswordMatch = await verifyPassword(formData.get("password") as string,FoundUser.password);
-    console.log(`Password Matched:${isPasswordMatch}`)
     if(!isPasswordMatch){
       return{
         success:false,

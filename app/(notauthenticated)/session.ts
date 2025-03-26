@@ -78,3 +78,19 @@ export const getUser = cache(async () => {
     return null
   }
 })
+
+export const getUserId = cache(async () =>{
+  const session = await verifySession()
+  if(!session) return null 
+
+  try{
+    const data  = await prisma.user_model.findUnique({
+      where:{
+        id:String(session.userId)
+      }
+    })
+    return data?.id
+  }catch { 
+    return null
+  }
+})

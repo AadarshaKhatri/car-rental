@@ -1,0 +1,90 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import { useActionState, useEffect, useState } from "react";
+import { createRentals } from "../../actions/action";
+import { CarModel } from "@/lib/types";
+import axios from "axios"
+import { toast } from "sonner";
+
+const RentCarForm = () => {
+  const [avaliableCars, setAvailableCars] = useState<CarModel []>();
+  const [carID,setCarId] = useState<string>("");
+  const [state,createRentalAction] = useActionState(createRentals, undefined);
+
+  
+  useEffect(()=>{
+    async function FetchData(){
+      const data : CarModel [] = await (await axios.get("/api/getAvailableCars")).data
+      console.log(data);
+      if(!data){
+        return null
+      }
+     setAvailableCars(data)
+    }
+    FetchData();
+  },[])
+
+  useEffect(()=>{
+    if(state?.success){
+      toast.success("Renal Car Added!")
+      setAvailableCars([]);
+      }else if (!state?.success && state?.error) {
+        toast.error("Error Creating the Rental")
+        setAvailableCars([]);
+      }
+  },[state])
+  return (
+    <section>
+    <div className="flex flex-col justify-center items-center gap-y-8">
+      <form
+        action={createRentalAction}
+        className="w-full flex flex-col justify-center items-center gap-y-6"
+      >
+        
+        <Select onValueChange={(value) => setCarId(value)} required>
+          <SelectTrigger className="w-full py-6 bg-gray-800 text-white border border-muted rounded-md">
+            <SelectValue placeholder="Your Available Cars" />
+          </SelectTrigger>
+          <SelectContent className="w-full bg-gray-900 border border-muted rounded-md shadow-lg">
+            <SelectGroup>
+         {
+          avaliableCars?.map((avaliableCar,index)=>(
+            <SelectItem key={index} value={avaliableCar.id} className="px-6 py-2 cursor-pointer hover:bg-gray-100">
+                {avaliableCar.brand}
+              </SelectItem>
+          ))
+         }
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+
+        {/* Hidden Input to store transmission value */}
+        <Input type="text" className="hidden" value={carID} name="carId" readOnly/>
+
+         <div className="w-full flex flex-col md:flex-row gap-5 justify-between items-center">
+          <label className="w-full flex flex-col gap-2">
+          <span className="text-gray-300">Start Date</span>
+          <Input name="startDate" type="date" className="w-full py-6 flex justify-between"/>
+        </label>
+
+        <label className="w-full flex flex-col gap-2">
+          <span className="text-gray-300">End Date</span>
+          <Input name="endDate" type="date" className="w-full  py-6 flex justify-between"/>
+        </label>
+         </div>
+        <Button>Create Car</Button>
+      </form>
+    </div>
+  </section>
+  )
+}
+
+export default RentCarForm

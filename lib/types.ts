@@ -7,7 +7,19 @@ export type PrevState = {
 
 
 export type CarModel = {
+  id:string
+  userId:string
   brand:string
   mileage:number
   no_seats:number
+  status:string
+  MFD_Date:number
+  transmission:string
+  pricePerDay:Float16Array
+
+}
+
+export type RentalModel = {
+  startDate:Date
+  endDate:Date,
 }
