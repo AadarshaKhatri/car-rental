@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 
 
 interface createCarState extends PrevState {
-  error_msg: {
+  error_msg?: {
     mileage?:string[]
     Seats?: string[];
     brand?: string[];
@@ -19,7 +19,7 @@ interface createCarState extends PrevState {
 }
 
 // ================ Server Action to Create Cars =========================
-export async function createCars(prevState: createCarState, formData: FormData){
+export async function createCars(prevState: createCarState, formData: FormData) : Promise<createCarState>{
   console.log("Car Create Hit!");
   try {
     const { success, error } = CarSchema.safeParse({
@@ -77,8 +77,8 @@ export async function createCars(prevState: createCarState, formData: FormData){
       }
     });
 
-    revalidatePath("/cars", "page");
-    return { success: true, message: "Car created successfully!", error: null, error_msg:null};
+    revalidatePath("/cars");
+    return { success: true, message: "Car created successfully!", error: null};
   } catch (error) {
     console.error("Error occurred while creating car:")
     console.log(`${error}`)
@@ -86,14 +86,14 @@ export async function createCars(prevState: createCarState, formData: FormData){
       ...prevState,
       success: false,
       error: "An unexpected error occurred",
-      message: error,
+      message: `${error}`,
       error_msg: undefined,
     };
   }
 }
 
 
-export async function createRentals (prevState:PrevState,formData:FormData){
+export async function createRentals (prevState:PrevState,formData:FormData) : Promise<PrevState>{
 
   console.log("Car Rental Hit")
   console.log("Rental Form Data:", formData);
@@ -141,16 +141,35 @@ export async function createRentals (prevState:PrevState,formData:FormData){
 
 
 // ======================= Server Action to Delete Cars ==========================
-export async function deleteCars(prevState: PrevState, formData : FormData){
+export async function deleteCars(prevState: PrevState, formData : FormData) : Promise<PrevState>{
   console.log("Delete Data Hit!");
   console.log("Delete Form Data",formData);
   try{
+    //Finding the reatnal for the car before deleting
+    const carRental = await prisma.rental_model.findFirst({
+      where:{
+        carId:formData.get("carId") as string,
+      },
+      select:{
+        id:true
+      }
+    })
+    console.log(carRental);
+
+    // Deleting both the rental and car at once
+    if(carRental){
+      await prisma.rental_model.delete({
+        where:{
+          id:carRental?.id,
+        }
+      })
+    }
     await prisma.car_model.delete({
       where:{
         id:formData.get("carId") as string,
       }
     })
-    revalidatePath("/cars","page");
+    revalidatePath("/cars");
     return {
       success:true,
       error:null,
@@ -158,7 +177,7 @@ export async function deleteCars(prevState: PrevState, formData : FormData){
     }
   
   }catch(error){
-    console.log(`${error}`)
+    console.log(`Error: ${error}`)
     return { 
       success:false,
       message:null,

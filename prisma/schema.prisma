@@ -64,7 +64,7 @@ model rental_model {
 enum CarStatus {
   AVAILABLE
   RENTED
-  MAINTENANCE
+  NOT_AVAILABLE
 }
 
 enum RentalStatus {

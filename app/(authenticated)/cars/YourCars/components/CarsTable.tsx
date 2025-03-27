@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -7,17 +9,18 @@ import axios from "axios";
 import React, { useActionState, useEffect, useState } from 'react'
 import { deleteCars } from "../../actions/action";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Navigation } from "lucide-react";
 
 const CarsTable = () => {
+  const router = useRouter();
   const [cars,setCars] = useState<CarModel []>();
-  const [state,carDeleteAction] = useActionState(deleteCars,undefined);
-  useEffect(()=>{
-    if(state?.success){
-      toast.success("Car Deleted Sucessfully!");
-    }
-  },[state])
-
-
+  const [state,carDeleteAction] = useActionState(deleteCars,{
+    success:false,
+    error:null,
+    message:null,
+  });
   useEffect(()=>{
     async function FetchCar(){
       const data : CarModel [] = await ((await axios.get("/api/getAllUserCars")).data)
@@ -29,8 +32,14 @@ const CarsTable = () => {
     }
     FetchCar();
   },[])
-
-
+  
+  useEffect(()=>{
+    if(state?.success){
+      toast.success("Car Deleted Sucessfully!");
+      router.refresh();
+    }
+  },[state,router])
+  
   return (
     <section className='w-full pb-20'>
        <div className="w-full overflow-x-auto">
@@ -47,6 +56,7 @@ const CarsTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
+                
                 {
                   cars === null ? 
                   <TableRow>
@@ -56,21 +66,29 @@ const CarsTable = () => {
                     </TableRow>
                   :
                     cars?.map((car,index)=>(
-  
-                  <TableRow key={car.id} className="border-b  transition">
+                    <TableRow  key={car.id}  className="border-b  transition">
+                  
+                    
                     <TableCell className="table-padding font-medium">{index+1}</TableCell>
                     <TableCell className="table-padding">{car.brand}</TableCell>
-                    <TableCell className="table-padding">{car.MFD_Date}</TableCell>
+                    <TableCell className="table-padding">{car.year}</TableCell>
                     <TableCell className="table-padding">{car.transmission}</TableCell>
                     <TableCell className="table-padding">{car.pricePerDay} per/day</TableCell>
                     <TableCell className="table-padding">{car.status}</TableCell>
+                  
                     <TableCell className="table-padding">
                     <form action={carDeleteAction}>
                       <Input name="carId" className="hidden" defaultValue={car.id}/>
                       <Button className="text-white bg-red-400 hover:bg-red-500/50">Delete</Button>
                     </form>
-                    </TableCell>
-                  </TableRow>
+                      </TableCell>
+                      <TableCell>
+                      <Link className="w-full" href={`/cars/${car.id}`} passHref>
+                      <Navigation className="text-primary"/>
+                      </Link>
+                      </TableCell>
+                      
+                    </TableRow>
                     ))
                   
                 }

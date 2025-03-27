@@ -13,23 +13,38 @@ import {
 import { useActionState, useState, useEffect } from "react";
 import { createCars } from "../../actions/action";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 const CreateCarForm = () => {
+  const router = useRouter();
   const [transmission, setTransmission] = useState<string>("");
-  const [state, CreateCarsAction] = useActionState(createCars, undefined);
+  const [state, CreateCarsAction] = useActionState(createCars, {
+    success:false,
+    message:null,
+    error:null,
+    error_msg:{
+      brand:[],
+      MFD_Date:[],
+      mileage:[],
+      pricePerDay:[],
+      Seats:[],
+      transmission:[]
+    }
+  });
 
   useEffect(() => {
     if (state?.success) {
       toast.success("Car Created!")
       setTransmission("")
+      router.refresh()
     } else if (state?.error_msg) {
       Object.entries(state.error_msg).forEach(([key,value]) => {
         if(key) return null
         toast.error(`${value}`);
       });
     }
-  }, [state]);
+  }, [state,router]);
 
   return (
     <section>

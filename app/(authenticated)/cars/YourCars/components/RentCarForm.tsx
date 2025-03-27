@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,11 +15,17 @@ import { createRentals } from "../../actions/action";
 import { CarModel } from "@/lib/types";
 import axios from "axios"
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const RentCarForm = () => {
+  const router = useRouter()
   const [avaliableCars, setAvailableCars] = useState<CarModel []>();
   const [carID,setCarId] = useState<string>("");
-  const [state,createRentalAction] = useActionState(createRentals, undefined);
+  const [state,createRentalAction] = useActionState(createRentals, {
+    success:false,
+    error:null,
+    message:null,
+  });
 
   
   useEffect(()=>{
@@ -36,11 +44,12 @@ const RentCarForm = () => {
     if(state?.success){
       toast.success("Renal Car Added!")
       setAvailableCars([]);
+      router.refresh();
       }else if (!state?.success && state?.error) {
-        toast.error("Error Creating the Rental")
+        toast.error("Failed to make your car available for rental!")
         setAvailableCars([]);
       }
-  },[state])
+  },[state,router])
   return (
     <section>
     <div className="flex flex-col justify-center items-center gap-y-8">

@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button"
 import LayoutWrapper from "../LayoutWrapper"
 import { useState } from "react"
-import AllCars from "./AllCars/components/AllCars";
+import AllCars from "./AllCars/AllCars";
 import YourCars from "./YourCars/YourCars";
 const CarsPage = () => {
-  const [activeTabs,setActiveTabs] = useState<string>("All Cars");
+  const [activeTabs,setActiveTabs] = useState<string>("Rent Cars");
 
   function handleTabs(tab:string){
     setActiveTabs(tab);
@@ -22,7 +22,7 @@ const CarsPage = () => {
               {/* Choose Between the Cars */}
               <div className="flex justify-center items-center gap-5">
               <div className="flex flex-row justify-between pb-5">
-                  {["All Cars", "Your Cars"].map((tab) => (
+                  {["Rent Cars", "Your Cars"].map((tab) => (
                     <div
                       key={tab}
                       onClick={() => handleTabs(tab)}
@@ -46,9 +46,9 @@ const CarsPage = () => {
 
             {/* UI Component */}
             <div className="w-full">
-              <div className={`transition-opacity duration-300 ${activeTabs === "All Cars" ? "opacity-100" : "opacity-0"}`}>
+              <div className={`transition-opacity duration-300 ${activeTabs === "Rent Cars" ? "opacity-100" : "opacity-0"}`}>
               {
-                activeTabs === "All Cars" && <AllCars/>
+                activeTabs === "Rent Cars" && <AllCars/>
               }
               </div>
 

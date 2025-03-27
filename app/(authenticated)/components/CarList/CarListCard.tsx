@@ -1,20 +1,34 @@
+
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Image from "next/image"
 import { Armchair, Calendar, Fuel, KeySquare } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { CarModel } from "@/lib/types"
 
-const Cars = () => {
+
+interface CarProps extends CarModel {
+  username:string,
+}
+const Cars =(props:CarProps) => {
+
   const cardContents = [
-    {label:"Company", icon:Fuel,value:"80 L"},
-    {label:"Transmission", icon:KeySquare,value:"Manaual"},
-    {label:"MFD", icon:Calendar,value:"2012"},
-    {label:"Seats", icon:Armchair,value:"2"},
+    {label:"Company", icon:Fuel,value:`${props.mileage} L`},
+    {label:"Transmission", icon:KeySquare,value:`${props.transmission}`},
+    {label:"MFD", icon:Calendar,value:`${props.year}`},
+    {label:"Seats", icon:Armchair,value:`${props.no_seats}`},
 
   ]
   return (
     <section>
         <div>
               <Card className="relative w-[290px] px-3 gap-3">
-                <span className="absolute right-5 bottom-32 text-sm bg-green-500 px-2 py-1 rounded text-background">Available</span>
+                {
+                  props.status === "AVAILABLE" ? 
+                  <span className="absolute right-5 bottom-42 text-sm bg-green-500 px-2 py-1 rounded text-background">Available</span>
+                  :
+                  null
+                }
                 <Image
                 src="/"
                 alt="Car Iamges"
@@ -23,8 +37,8 @@ const Cars = () => {
                 className="w-full h-[200px] text-white"
                 />
                 <CardHeader className="px-0 flex justify-between items-center">
-                  <CardTitle className="text-sm">Name of the Car</CardTitle>
-                  <CardDescription className="text-primary">Price<span className="text-secondary">/per hour</span></CardDescription>
+                  <CardTitle className="text-sm w-36 truncate overflow-hidden whitespace-nowrap">{props.brand}</CardTitle>
+                  <CardDescription className="text-primary">{props.pricePerDay}<span className="text-secondary">/per hour</span></CardDescription>
                 </CardHeader>
                 <hr className="bg-white">
                 </hr>
@@ -38,7 +52,28 @@ const Cars = () => {
                     ))
                   }
                 </CardContent>
-                <CardFooter className="p-0 text-sm text-secondary">By Aadarsha Khatri</CardFooter>
+                <CardFooter className="px-0 mt-3">
+                <div className="w-full flex flex-row justify-between items-center">
+                  
+                  <div className="flex  flex-row justify-between items-center gap-3">
+                    <div className="w-[24px] h-[24px] bg-red-300 rounded-full">
+                    {/* Image Here */}
+        
+                  </div>
+
+                   <div>
+                    <p className="text-sm text-secondary w-20 truncate overflow-hidden whitespace-nowrap">{props.username}</p>
+                  </div>
+
+                  </div>
+
+                  <div className="flex">
+                    <Button>Rent out</Button>
+
+                  </div>
+                </div>
+                  </CardFooter>
+             
               </Card>
               </div>
     </section>

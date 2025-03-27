@@ -13,13 +13,15 @@ export type CarModel = {
   mileage:number
   no_seats:number
   status:string
-  MFD_Date:number
+  year:number
   transmission:string
   pricePerDay:Float16Array
 
 }
 
-export type RentalModel = {
+export interface RentalModel extends CarModel {
+  id:string
+  status:string
   startDate:Date
   endDate:Date,
 }

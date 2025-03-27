@@ -1,8 +1,6 @@
 import NavigationBar from "./dashboard/components/Navigation/NavigationBar";
 import Sidebar from "./dashboard/components/SideBar/SideBar";
 
-
-
 const LayoutWrapper = ({children}: { children: React.ReactNode }) => {
   return (
     <section className="container max-w-full mx-auto overflow-x-hidden">
