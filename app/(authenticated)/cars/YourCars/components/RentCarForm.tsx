@@ -57,6 +57,7 @@ const RentCarForm = () => {
         action={createRentalAction}
         className="w-full flex flex-col justify-center items-center gap-y-6"
       >
+        <label>By doing this you are making your car availabel for rental</label>
         
         <Select onValueChange={(value) => setCarId(value)} required>
           <SelectTrigger className="w-full py-6 bg-gray-800 text-white border border-muted rounded-md">

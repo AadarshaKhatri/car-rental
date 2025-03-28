@@ -20,6 +20,11 @@ export async function GET (){
        },
     
         status:"AVAILABLE",
+        rentals:{
+          some:{
+            status:"PENDING"
+          }
+        }
       }
     })
     console.log(data);

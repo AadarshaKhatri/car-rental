@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Armchair, Calendar, Fuel, KeySquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CarModel } from "@/lib/types"
+import Link from "next/link"
 
 
 interface CarProps extends CarModel {
@@ -68,7 +69,9 @@ const Cars =(props:CarProps) => {
                   </div>
 
                   <div className="flex">
+                    <Link href ={`cars/${props.id}`}>
                     <Button>Rent out</Button>
+                    </Link>
 
                   </div>
                 </div>

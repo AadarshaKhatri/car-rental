@@ -17,7 +17,7 @@ const DashboardPage = () => {
             <div className="flex flex-wrap justify-start items-center gap-5">
               {/* Cards Here*/}
               {Array.from({ length: 5 }).map((_, index) => (
-                  <div key={index}><Cars/></div>
+                <div key={index}><Cars/></div>
                 ))}
             </div>
           </div>

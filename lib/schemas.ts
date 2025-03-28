@@ -19,6 +19,7 @@ export const sessionSchema = z.object({
 })
 
 export const CarSchema = z.object({
+  
   no_seats :z.number().max(20).min(2),
   mileage:z.number().min(1),
   brand:z.string(),

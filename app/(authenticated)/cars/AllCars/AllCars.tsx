@@ -26,7 +26,6 @@ const AllCars = () => {
     }
     FetchData()
   },[])
-  console.log(rentalCars);
 
   return (
     <section className="container max-w-full">

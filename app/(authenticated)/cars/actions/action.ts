@@ -11,6 +11,7 @@ interface createCarState extends PrevState {
   error_msg?: {
     mileage?:string[]
     Seats?: string[];
+    status?:string[],
     brand?: string[];
     MFD_Date?: string[];
     pricePerDay?: string[];
@@ -50,6 +51,7 @@ export async function createCars(prevState: createCarState, formData: FormData) 
         error: "Failed to Validate",
         message: null,
         error_msg: {
+          status:error.flatten().fieldErrors.status,
           mileage:error.flatten().fieldErrors.mileage,
           brand: error?.flatten().fieldErrors.brand,
           Seats: error?.flatten().fieldErrors.no_seats,
@@ -62,7 +64,7 @@ export async function createCars(prevState: createCarState, formData: FormData) 
 
    await prisma.car_model.create({
       data:{
-    
+        status:formData.get("status") as string === "Available" ? "AVAILABLE" : "NOT_AVAILABLE",
         brand:formData.get("brand") as string,
         no_seats:Number(formData.get("no_seats") as string),
         pricePerDay:Number(formData.get("pricing") as string),
@@ -77,7 +79,8 @@ export async function createCars(prevState: createCarState, formData: FormData) 
       }
     });
 
-    revalidatePath("/cars");
+    revalidatePath("/cars","page");
+    
     return { success: true, message: "Car created successfully!", error: null};
   } catch (error) {
     console.error("Error occurred while creating car:")
@@ -120,6 +123,7 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
         },
         startDate:new Date(`${formData.get("startDate") as string}T00:00:00`),
         endDate:new Date(`${formData.get("endDate") as string}T00:00:00`),
+        status:"PENDING",
       }
     });
     console.log(newRental);

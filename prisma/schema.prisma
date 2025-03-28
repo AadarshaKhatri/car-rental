@@ -56,7 +56,7 @@ model rental_model {
   carId     String
   startDate DateTime
   endDate   DateTime
-  status    RentalStatus @default(PENDING)
+  status    RentalStatus @default(NOTRENT)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 }
@@ -68,6 +68,7 @@ enum CarStatus {
 }
 
 enum RentalStatus {
+  NOTRENT
   PENDING
   APPROVED
 }
