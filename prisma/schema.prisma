@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // Change this if you're using a different database
+  provider = "postgresql" 
   url      = env("DATABASE_URL")
 }
 
@@ -14,21 +14,13 @@ model user_model {
   role      UserRoles      @default(USER)
   password  String
   cars      car_model[]
-  posts     post_model[]
+  user_boooking booking_model []
   rentals   rental_model[]
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 }
 
-model post_model {
-  id        String      @id @default(uuid())
-  title     String
-  content   String?
-  car       car_model[]
-  user      user_model  @relation(fields: [userId], references: [id])
-  userId    String
-  createdAt DateTime    @default(now())
-}
+
 
 model car_model {
   id           String         @id @default(uuid())
@@ -40,25 +32,37 @@ model car_model {
   mileage      Int
   status       CarStatus      @default(AVAILABLE)
   rentals      rental_model[]
-  post         post_model?     @relation(fields: [postId], references: [id])
-  postId       String?
-  user         user_model @relation(fields: [userId],references: [id])
-  userId       String
+  booking booking_model[]
+  author         user_model @relation(fields: [authorId],references: [id])
+  authorId       String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 }
 
 model rental_model {
   id        String       @id @default(uuid())
-  user      user_model   @relation(fields: [userId], references: [id])
-  userId    String
+  author    user_model   @relation(fields: [authorId], references: [id])
+  authorId   String
   car       car_model    @relation(fields: [carId], references: [id])
   carId     String
   startDate DateTime
   endDate   DateTime
-  status    RentalStatus @default(NOTRENT)
+  status    RentalStatus @default(NOT_APPLIED)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+  bookedBy booking_model []
+}
+
+
+model booking_model {
+  id String @id @default(uuid())
+  booked_user user_model @relation(fields: [userId], references: [id])
+  userId String
+  rents rental_model @relation(fields: [rentalId], references: [id])
+  rentalId String
+  cars car_model @relation(fields: [carId],references: [id])
+  carId String
+
 }
 
 enum CarStatus {
@@ -68,7 +72,7 @@ enum CarStatus {
 }
 
 enum RentalStatus {
-  NOTRENT
+  NOT_APPLIED
   PENDING
   APPROVED
 }

@@ -8,21 +8,23 @@ export async function GET (){
     if(!user) return null
     const data = await prisma.car_model.findMany({
       include:{
-        user:{
+        author:{
           select:{
             name:true,
           }
         }
       },
       where:{
-       userId:{
-        not:user
+       author:{
+        id:{
+          not:user
+        }
        },
     
         status:"AVAILABLE",
         rentals:{
           some:{
-            status:"PENDING"
+            status:"NOT_APPLIED"
           }
         }
       }

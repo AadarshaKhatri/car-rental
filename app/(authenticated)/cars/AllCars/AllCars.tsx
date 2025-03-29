@@ -8,7 +8,7 @@ import axios from "axios";
 
 
 interface AllCarTypes extends CarModel {
-  user: { 
+  author: { 
     name:string,
   }
 }
@@ -46,7 +46,7 @@ const AllCars = () => {
           rentalCars?.map((rentalCar,index)=>(
             <div key={index}>
             <Cars
-            username={rentalCar.user?.name}
+            username={rentalCar.author?.name}
             brand={rentalCar.brand}
             id={rentalCar.id}
             mileage={rentalCar.mileage}
@@ -55,11 +55,11 @@ const AllCars = () => {
             status={rentalCar.status}
             transmission={rentalCar.transmission}
             year={rentalCar.year}
-            userId={rentalCar.userId}
+            authorId={rentalCar.authorId}
 
           />
             <p>Name:{rentalCar.brand}</p>
-            <p>User:{rentalCar.userId}</p>
+            <p>User:{rentalCar.authorId}</p>
             </div>
           ))
         }

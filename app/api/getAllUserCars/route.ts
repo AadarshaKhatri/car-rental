@@ -8,7 +8,7 @@ export async function GET(){
     const user = await getUserId();
     const data = await prisma.car_model.findMany({
       where:{
-        userId:String(user),
+        authorId:String(user),
       }
     })
     return NextResponse.json(data);

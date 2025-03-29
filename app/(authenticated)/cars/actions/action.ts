@@ -71,7 +71,7 @@ export async function createCars(prevState: createCarState, formData: FormData) 
         transmission:formData.get("transmission") as string,
         year:Number(formData.get("mfd_date") as string),
         mileage:Number(formData.get("mileage") as string),
-        user:{
+        author:{
           connect:{
             id:String(user)
           }
@@ -111,7 +111,7 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
     }
     const newRental = await prisma.rental_model.create({
       data:{
-        user:{
+        author:{
           connect:{
             id:String(user),
           }
@@ -123,7 +123,7 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
         },
         startDate:new Date(`${formData.get("startDate") as string}T00:00:00`),
         endDate:new Date(`${formData.get("endDate") as string}T00:00:00`),
-        status:"PENDING",
+        status:"NOT_APPLIED",
       }
     });
     console.log(newRental);
@@ -186,6 +186,91 @@ export async function deleteCars(prevState: PrevState, formData : FormData) : Pr
       success:false,
       message:null,
       error:"Failed to delete the car"
+    }
+  }
+}
+
+
+export async function bookforRental(prevState:PrevState,formData:FormData) : Promise<PrevState> {
+  console.log('Book Rental Hit!');
+  console.log("Booking Rental Form Data:",formData);
+  try{
+    const user = await getUserId();
+    if(!user){
+      return {
+        success:false,
+        error:"No User Found!",
+        message:null
+      }
+    }
+    const carId = formData.get("carId") as string;
+    if (!carId) {
+      return {
+        success: false,
+        error: "Car ID is required!",
+        message: null,
+      };
+    }
+
+    const found_rental = await prisma.rental_model.findFirst({
+      where: {
+        carId: String(carId),
+        authorId:user,
+      },
+    });
+
+    if (!found_rental) {
+      return {
+        success: false,
+        error: "Rental not found for the specified car!",
+        message: null,
+      };
+    }
+
+    console.log("Rental Found:",found_rental);
+    await prisma.$transaction([
+       prisma.booking_model.create({
+        data:{
+          cars:{
+            connect:{
+              id:formData.get("carId") as string,
+            }
+          },
+          booked_user:{
+            connect:{
+              id:user
+            }
+          },
+          rents:{
+            connect:{
+              id:found_rental.id
+            }
+          }
+
+        }
+      }),
+       prisma.rental_model.update({
+        where:{
+          id:String(found_rental.id)
+        },
+        data:{
+          status:"PENDING",
+        }
+      })
+    ])
+    
+    return { 
+      success:true,
+      error:null,
+      message:null
+    }
+
+  }catch(error){
+    console.log("Erorr from Book Rental: ",error);
+    return {
+      success:false,
+      message:null,
+      error:"Error from booking rental!"
     }
   }
 }

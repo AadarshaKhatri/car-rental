@@ -8,7 +8,7 @@ export type PrevState = {
 
 export type CarModel = {
   id:string
-  userId:string
+  authorId:string
   brand:string
   mileage:number
   no_seats:number

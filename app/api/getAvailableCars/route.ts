@@ -10,7 +10,7 @@ export async function GET() {
     if(!user) return null
     const data = await prisma.car_model.findMany({
       where:{
-        userId:user,
+        authorId:user,
         status:"AVAILABLE",
       }
     })
