@@ -7,6 +7,7 @@ import { useActionState, useEffect, useState } from "react";
 import { bookforRental } from "../../../actions/action";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
+import { Input } from "@/components/ui/input";
 
 const CarInformation =   () => {
   const params = useParams();
@@ -23,6 +24,7 @@ const CarInformation =   () => {
   useEffect(()=>{
     async  function FetchData(){
     const data : CarModel= await (await axios.get(`/api/getCarInformation/${params.id}`)).data
+  
     setCar(data);
   }
   FetchData();
@@ -30,12 +32,11 @@ const CarInformation =   () => {
 
   useEffect(()=>{
     if(state.success){
-      toast.success("Your request has been applied to the ownner")
+      toast.success(state.message)
     }else if(!state.success){
-      toast.error("Failed to apply for rental!");
+      toast.error(state.error);
     }
   },[state])
-  console.log("car:",cars);
   return (
     <section>
         <div className="flex flex-row justify-start items-start gap-10">
@@ -62,6 +63,7 @@ const CarInformation =   () => {
 
           <form action={rentalBookingAction}>
             <p>Brand : {cars?.brand}</p>
+            <Input className="hidden" defaultValue={cars?.id} name="carId"/>
             <Button type="submit">
               Book Now
             </Button>

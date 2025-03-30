@@ -215,10 +215,8 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
     const found_rental = await prisma.rental_model.findFirst({
       where: {
         carId: String(carId),
-        authorId:user,
       },
     });
-
     if (!found_rental) {
       return {
         success: false,
@@ -227,7 +225,13 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
       };
     }
 
-    console.log("Rental Found:",found_rental);
+    if(found_rental.status==="PENDING"){
+      return {
+        success:false,
+        error:"The Car is Already made available for rental",
+        message:null,
+      }
+    }
     await prisma.$transaction([
        prisma.booking_model.create({
         data:{
@@ -262,10 +266,11 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
     return { 
       success:true,
       error:null,
-      message:null
+      message:"Your request for rental has been applied!"
     }
 
   }catch(error){
+    console.log(`${error}`);
     console.log("Erorr from Book Rental: ",error);
     return {
       success:false,
