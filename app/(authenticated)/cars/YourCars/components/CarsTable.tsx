@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Navigation } from "lucide-react";
 
+
+
 const CarsTable = () => {
   const router = useRouter();
   const [cars,setCars] = useState<CarModel []>();
@@ -24,12 +26,12 @@ const CarsTable = () => {
   useEffect(()=>{
     async function FetchCar(){
       const data : CarModel [] = await ((await axios.get("/api/getAllUserCars")).data)
-      console.log("User Cars",data);
       if(!data){
         return null;
       }
       setCars(data);
     }
+    
     FetchCar();
   },[])
   
@@ -66,7 +68,7 @@ const CarsTable = () => {
                     </TableRow>
                   :
                     cars?.map((car,index)=>(
-                    <TableRow  key={car.id}  className="border-b  transition">
+                    <TableRow  key={index}  className="border-b  transition">
                   
                     
                     <TableCell className="table-padding font-medium">{index+1}</TableCell>

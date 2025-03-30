@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Cars from "../../components/CarList/CarListCard"
-import { Checkboxes } from "./components/FilterForm"
+import {  RentRequest } from "./components/FilterForm"
 import { CarModel } from "@/lib/types";
 import axios from "axios";
 
@@ -31,9 +31,9 @@ const AllCars = () => {
     <section className="container max-w-full">
       <div className="flex flex-col justify-center items-center">
         
-        {/* CheckBoxes Here */}
+        {/* Table Here */}
         <div>
-          <Checkboxes/>
+          <RentRequest/>
         </div>
 
         <div className="mt-5 w-full flex flex-wrap justify-start items-start gap-12">

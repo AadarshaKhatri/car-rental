@@ -7,11 +7,13 @@ export async function GET(){
   try{
     const user = await getUserId();
     const data = await prisma.car_model.findMany({
-      where:{
-        authorId:String(user),
-      }
-    })
-    return NextResponse.json(data);
+      where: {
+        authorId: String(user),
+      },
+  
+    });
+    console.log(data)
+     return NextResponse.json(data);
   }catch{
     console.log("Failed to Fetch the Cars");
     return null;
