@@ -190,6 +190,7 @@ export async function deleteCars(prevState: PrevState, formData : FormData) : Pr
   }
 }
 
+// ======================= Server Action to creat Bookings ==========================
 
 export async function bookforRental(prevState:PrevState,formData:FormData) : Promise<PrevState> {
   console.log('Book Rental Hit!');
@@ -280,3 +281,26 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
   }
 }
 
+
+// ======================= Server Action to Accept the Booking ==========================
+
+export async function acceptBooking(prevState:PrevState,formData:FormData) : Promise <PrevState> {
+  console.log("Accept Booking Hit!")
+  console.log("Accept Booking Form Data:",formData)
+  try{
+
+    return {
+      success:false,
+      error:null,
+      message:"Booking Successfully Accepted!"
+    }
+
+  }catch(error){
+    console.log("Error",error);
+    return {
+      success:false,
+      error:"Failed to accpet the booking!",
+      message:null,
+    }
+  }
+}

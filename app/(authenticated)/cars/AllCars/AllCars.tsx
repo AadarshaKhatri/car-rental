@@ -32,7 +32,7 @@ const AllCars = () => {
       <div className="flex flex-col justify-center items-center">
         
         {/* Table Here */}
-        <div>
+        <div className="w-full">
           <RentRequest/>
         </div>
 
