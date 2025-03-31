@@ -11,6 +11,7 @@ export async function GET (){
       select:{
         cars:{
         select:{
+          id:true,
           brand:true,
           pricePerDay:true,
         }

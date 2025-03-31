@@ -3,11 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Check, Delete } from "lucide-react";
-import { startTransition, useActionState, useEffect, useState } from "react";
+import {  useActionState, useEffect, useState } from "react";
 import { acceptBooking } from "../../actions/action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
 
 
 interface Rent {
@@ -18,6 +19,7 @@ interface Rent {
 }
 
 interface Car {
+  id:string
   brand: string;
   pricePerDay: number;
 }
@@ -65,14 +67,7 @@ export function RentRequest() {
     }
   }, [state, router]);
 
-  const handleAction = async (status: string, rentalId: string) => {
-    startTransition(() => {
-      const formData = new FormData();
-      formData.append("status", status); // Add status to formData
-      formData.append("rentalId", rentalId); // Add rentalId to formData
-      acceptBookingAction(formData); // Send formData with status and rentalId
-    });
-  };
+    const [status,setStatus] = useState<string>("");
 
   return (
     <section className="w-full flex flex-row justify-center items-center gap-5">
@@ -108,21 +103,26 @@ export function RentRequest() {
                       <TableCell className="table-padding">{booking.rents.status}</TableCell>
 
                       <TableCell className="table-padding flex gap-3">
-                      
-
+                        <form action={acceptBookingAction} className="flex fle-row gap-4">
+                        <Input defaultValue={booking.cars.id} className="hidden" name="carId"/>
+                        <Input defaultValue={booking.rents.id} className="hidden" name="rentalId"/>
+                        <Input defaultValue={status} className="hidden" name="status"/>
                         <Button
-                          onClick={() => handleAction("Not_Approved",booking.rents.id)}
+                        type="submit"
+                          onClick={() => setStatus("NO")}
                           className="text-white bg-red-400 hover:bg-red-500/50"
                         >
                           <Delete />
                         </Button>
 
                         <Button
-                          onClick={() => handleAction("Approved", booking.rents.id)}
+                        type="submit"
+                          onClick={() => setStatus("YES")}
                           className="text-white bg-green-400 hover:bg-green-500/50"
                         >
                           <Check />
                         </Button>
+                        </form>
                       </TableCell>
                     </TableRow>
                   ))}

@@ -5,8 +5,6 @@ import { CarSchema } from "@/lib/schemas";
 import { PrevState } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
-
-
 interface createCarState extends PrevState {
   error_msg?: {
     mileage?:string[]
@@ -288,9 +286,35 @@ export async function acceptBooking(prevState:PrevState,formData:FormData) : Pro
   console.log("Accept Booking Hit!")
   console.log("Accept Booking Form Data:",formData)
   try{
+    
+    await prisma.$transaction([
+   
+       prisma.rental_model.update({
+        where:{
+          id:formData.get("rentalId") as string,
+        },
+        data:{
+          status:formData.get("status") as string ==="YES" ? "APPROVED" : "NOT_APPLIED",
+        }
+      }),
 
+      prisma.car_model.update({
+        where:{
+          id:formData.get("carId") as string,
+          rentals:{
+            some:{
+              id:formData.get("rentalId") as string,
+            }
+          }
+        },
+        data:{
+          status:formData.get("status") as string ==="YES" ? "RENTED" : "AVAILABLE",
+        }
+      })
+
+    ])
     return {
-      success:false,
+      success:true,
       error:null,
       message:"Booking Successfully Accepted!"
     }
@@ -304,3 +328,5 @@ export async function acceptBooking(prevState:PrevState,formData:FormData) : Pro
     }
   }
 }
+
+
