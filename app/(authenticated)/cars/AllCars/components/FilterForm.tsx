@@ -73,7 +73,9 @@ export function RentRequest() {
     <section className="w-full flex flex-row justify-center items-center gap-5">
       <div className="w-full flex flex-col justify-center items-center">
         {bookings.length === 0 ? (
-          null
+          <div className="w-full flex flex-row justify-center items-center">
+            <h2 className="text-lg font-semibold">No Pending Requested for your car!</h2>
+          </div>
         ) : (
           <div className="w-full flex flex-col justify-center items-center">
             <div>
@@ -97,7 +99,7 @@ export function RentRequest() {
                     <TableRow key={index} className="border-b transition">
                       <TableCell className="table-padding font-medium">{index+1}</TableCell>
                       <TableCell className="table-padding">{booking.cars.brand}</TableCell>
-                      <TableCell className="table-padding">{booking.rents.startDate}</TableCell>
+                      <TableCell className="table-padding">{(booking.rents.startDate).toLocaleLowerCase()}</TableCell>
                       <TableCell className="table-padding">{booking.rents.endDate}</TableCell>
                       <TableCell className="table-padding">{booking.booked_user.name}</TableCell>
                       <TableCell className="table-padding">{booking.rents.status}</TableCell>
