@@ -301,14 +301,18 @@ export async function acceptBooking(prevState:PrevState,formData:FormData) : Pro
       prisma.car_model.update({
         where:{
           id:formData.get("carId") as string,
-          rentals:{
-            some:{
-              id:formData.get("rentalId") as string,
-            }
-          }
         },
         data:{
           status:formData.get("status") as string ==="YES" ? "RENTED" : "AVAILABLE",
+        }
+      }),
+      prisma.rental_model.deleteMany({
+        where:{
+          carId:formData.get("carId") as string,
+          status:"PENDING",
+          id:{
+            not:formData.get("rentalId") as string,
+          }
         }
       })
 
