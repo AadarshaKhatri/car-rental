@@ -56,12 +56,12 @@ model rental_model {
 
 model booking_model {
   id String @id @default(uuid())
-  booked_user user_model @relation(fields: [bookedUserID], references: [id])
-  bookedUserID String
-  rents rental_model @relation(fields: [rentalId], references: [id])
-  rentalId String
-  cars car_model @relation(fields: [carId],references: [id])
-  carId String
+  booked_user user_model? @relation(fields: [bookedUserID], references: [id])
+  bookedUserID String?
+  rents rental_model? @relation(fields: [rentalId], references: [id])
+  rentalId String?
+  cars car_model? @relation(fields: [carId],references: [id])
+  carId String?
 
 }
 

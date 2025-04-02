@@ -24,3 +24,11 @@ export interface RentalModel extends CarModel {
   startDate:Date
   endDate:Date,
 }
+
+
+export interface BookingModel{
+  id:string
+  userId:string
+  rentalId:string
+  carId:string
+}

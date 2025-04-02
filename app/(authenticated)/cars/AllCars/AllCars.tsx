@@ -10,32 +10,27 @@ const AllCars = () => {
 
   return (
     <section className="container max-w-full">
-      <div className="flex flex-col justify-center items-center">
-        
-        {/* Table Here */}
-        <div className="flex flex-row justify-between items-start gap-10">
-
-          <div className="flex flex-col justify-center items-center gap-10">
-            <div className="w-full flex-1">
-              <RentRequest/>
-            </div>
-            
-            <div>
-              <CarsForRental/>
-
-            </div>
-           
+    <div className="w-full flex flex-col justify-center items-center">
+      
+      <div className="relative w-full flex flex-row justify-between items-start gap-5">
+        <div className="w-full flex flex-col justify-center items-center gap-10">
+          <div className="w-full flex-1">
+            <RentRequest />
           </div>
           
-          <div className="w-full flex justify-end items-end">
-            <RentedCars/>
+          <div>
+            <CarsForRental />
           </div>
         </div>
-
-       
-
+  
+        {/* Adjusted RentedCars Placement */}
+        <div className="w-[350px] flex flex-col items-end">
+          <RentedCars />
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
+  
   )
 }
 
