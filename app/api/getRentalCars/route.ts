@@ -22,11 +22,6 @@ export async function GET (){
        },
     
         status:"AVAILABLE",
-        rentals:{
-          some:{
-            status:"NOT_APPLIED"
-          }
-        }
       }
     })
     console.log(data);

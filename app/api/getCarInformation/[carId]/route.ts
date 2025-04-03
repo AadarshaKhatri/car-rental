@@ -14,8 +14,22 @@ export async function GET (  request: Request,
     const data = await prisma.car_model.findUnique({
       where:{
         id:carId,
+        rentals:{
+          every:{
+            carId:carId,
+          }
+        }
+      },
+      include:{
+        rentals:{
+          include:{
+            appliedUsers:true,
+          }
+        },
+        
       }
     })
+    console.log(data);
     return NextResponse.json(data);
   }catch(error){
     console.log("Error while fetching",error);

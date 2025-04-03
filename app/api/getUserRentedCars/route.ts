@@ -15,7 +15,11 @@ export async function GET(){
           status:"RENTED",
         },
         rents:{
-          status:"APPROVED",
+          appliedUsers:{
+            every:{
+              status:"APPROVED",
+            }
+          }
         }
       },
       include:{

@@ -121,7 +121,7 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
         },
         startDate:new Date(`${formData.get("startDate") as string}T00:00:00`),
         endDate:new Date(`${formData.get("endDate") as string}T00:00:00`),
-        status:"NOT_APPLIED",
+        
       }
     });
     console.log(newRental);
@@ -143,53 +143,64 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
 
 
 // ======================= Server Action to Delete Cars ==========================
-export async function deleteCars(prevState: PrevState, formData : FormData) : Promise<PrevState>{
+export async function deleteCars(prevState: PrevState, formData: FormData): Promise<PrevState> {
   console.log("Delete Data Hit!");
-  console.log("Delete Form Data",formData);
-  try{
-    //Finding the reatnal for the car before deleting
-    const carRental = await prisma.rental_model.findFirst({
-      where:{
-        carId:formData.get("carId") as string,
-      },
-      select:{
-        id:true
-      }
-    })
-    console.log(carRental);
+  console.log("Delete Form Data", formData);
 
-    // Deleting both the rental and car at once
-    if(carRental){
-      await prisma.rental_model.delete({
-        where:{
-          id:carRental?.id,
-        }
-      })
+  try {
+    // Finding all rentals for the car before deleting
+    const carRental = await prisma.rental_model.findMany({
+      where: {
+        carId: formData.get("carId") as string,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const rentalIds = carRental.map((rental) => rental.id);
+
+
+    if (rentalIds.length > 0) {
+      // Deleting applied users first to prevent foreign key issues
+      await prisma.applied_users.deleteMany({
+        where: {
+          rentalId: { in: rentalIds },
+        },
+      });
+
+      // Now deleting rentals
+      await prisma.rental_model.deleteMany({
+        where: {
+          id: { in: rentalIds },
+        },
+      });
     }
+
+    // Deleting the car
     await prisma.car_model.delete({
-      where:{
-        id:formData.get("carId") as string,
-      }
-    })
-    revalidatePath("/cars");
+      where: {
+        id: formData.get("carId") as string,
+      },
+    });
+
     return {
-      success:true,
-      error:null,
-      message:null,
-    }
-  
-  }catch(error){
-    console.log(`Error: ${error}`)
-    return { 
-      success:false,
-      message:null,
-      error:"Failed to delete the car"
-    }
+      success: true,
+      error: null,
+      message: "Car and related data deleted successfully",
+    };
+  } catch (error) {
+    console.log(`Error: ${error}`);
+    return {
+      success: false,
+      message: null,
+      error: "Failed to delete the car",
+    };
   }
 }
 
-// ======================= Server Action to creat Bookings ==========================
 
+// ======================= Server Action to creat Bookings ==========================
 export async function bookforRental(prevState:PrevState,formData:FormData) : Promise<PrevState> {
   console.log('Book Rental Hit!');
   console.log("Booking Rental Form Data:",formData);
@@ -210,58 +221,23 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
         message: null,
       };
     }
-
-    const found_rental = await prisma.rental_model.findFirst({
-      where: {
-        carId: String(carId),
-      },
-    });
-    if (!found_rental) {
-      return {
-        success: false,
-        error: "Rental not found for the specified car!",
-        message: null,
-      };
-    }
-
-    if(found_rental.status==="PENDING"){
-      return {
-        success:false,
-        error:"The Car is Already made available for rental",
-        message:null,
-      }
-    }
     await prisma.$transaction([
-       prisma.booking_model.create({
+      prisma.applied_users.create({
         data:{
-          cars:{
+          rentals:{
             connect:{
-              id:formData.get("carId") as string,
+              id:formData.get("rentalId") as string,
             }
           },
-          booked_user:{
+          applicant:{
             connect:{
               id:user
             }
           },
-          rents:{
-            connect:{
-              id:found_rental.id
-            }
-          }
-
+          status:"PENDING"
         }
       }),
-       prisma.rental_model.update({
-        where:{
-          id:String(found_rental.id)
-        },
-        data:{
-          status:"PENDING",
-        }
-      })
     ])
-    
     return { 
       success:true,
       error:null,
@@ -281,17 +257,35 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
 
 
 // ======================= Server Action to Accept the Booking ==========================
-
 export async function acceptBooking(prevState:PrevState,formData:FormData) : Promise <PrevState> {
   console.log("Accept Booking Hit!")
   console.log("Accept Booking Form Data:",formData)
   try{
-    
+    const user = await getUserId();
+    if(!user) return {success:false,error:"No User!",message:null};
     await prisma.$transaction([
-   
-       prisma.rental_model.update({
+      prisma.booking_model.create({
+        data:{
+              cars:{
+                connect:{
+                  id:formData.get("carId") as string,
+                }
+              },
+              booked_user:{
+                connect:{
+                  id:user
+                }
+              },
+              rents:{
+                connect:{
+                  id:formData.get("rentalId") as string,
+                }
+              }
+        }
+      }),
+       prisma.applied_users.update({
         where:{
-          id:formData.get("rentalId") as string,
+          id:formData.get("applicantId") as string,
         },
         data:{
           status:formData.get("status") as string ==="YES" ? "APPROVED" : "NOT_APPLIED",
@@ -306,12 +300,12 @@ export async function acceptBooking(prevState:PrevState,formData:FormData) : Pro
           status:formData.get("status") as string ==="YES" ? "RENTED" : "AVAILABLE",
         }
       }),
-      prisma.rental_model.deleteMany({
+      prisma.applied_users.deleteMany({
         where:{
-          carId:formData.get("carId") as string,
+          rentalId:formData.get("rentalId") as string,
           status:"PENDING",
           id:{
-            not:formData.get("rentalId") as string,
+            not:formData.get("applicantId") as string,
           }
         }
       })

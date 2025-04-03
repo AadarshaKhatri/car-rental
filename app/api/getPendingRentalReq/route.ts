@@ -16,18 +16,17 @@ export async function GET (){
           pricePerDay:true,
         }
         },
-        booked_user:{
-          select:{
-            name:true,
-            id:true,
-          }
-        },
         rents:{
           select:{
             startDate:true,
             endDate:true,
-            status:true,
             id:true,
+            appliedUsers:{
+              select:{
+                status:true,
+                id:true,
+              }
+            }
           }
         }
       },
@@ -35,7 +34,6 @@ export async function GET (){
       where:{
         rents:{
           is:{
-            status:"PENDING",
             authorId:user,
           }
         }
@@ -43,7 +41,7 @@ export async function GET (){
     })
 
    
-
+    console.log(data);
     return NextResponse.json(data);
   }catch(error){
     console.log("Error Fetching the data",error)
