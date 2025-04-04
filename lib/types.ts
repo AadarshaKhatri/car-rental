@@ -32,3 +32,10 @@ export interface BookingModel{
   rentalId:string
   carId:string
 }
+
+export interface AppliedUsersModel {
+  id:string
+  rentalId:string
+  applicantId:string
+  status:string
+}

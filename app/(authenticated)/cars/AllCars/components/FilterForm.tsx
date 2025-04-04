@@ -10,54 +10,58 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 
-interface BookingData {
-  cars: {
-    id: string;
-    brand: string;
-    pricePerDay: number;
-  } | null;
+interface CarModel {
+  brand: string;
+  id: string;
+}
 
-  rents: {
+interface BookingData {
+  status:string,
+  applicant: {
+    name: string;
     id: string;
-    startDate: Date;
-    endDate: Date;
-    appliedUsers: {
-      id: string;
-      status: string;
-    }[];
-  } | null;
+  };
+  rentals: {
+    id: string;
+    startDate: Date | null;
+    endDate: Date | null;
+    car: CarModel;
+  };
 }
 
 export function RentRequest() {
   const router = useRouter();
-  const [bookings, setBooking] = useState<BookingData[]>([]);
-
-  const [state, acceptBookingAction] = useActionState(acceptBooking, {
-    success: false,
-    error: null,
-    message: null,
-  });
+  const [status,setStatus] = useState<string>(" ");
+  const [bookings, setBookings] = useState<BookingData[]>([]);
+  const [state,accpetBookingAction] = useActionState(acceptBooking,{
+    success:false,
+    error:null,
+    message:null,
+  })
 
   useEffect(() => {
-    async function FetchData() {
-      const { data } = await axios.get("/api/getPendingRentalReq");
-      setBooking(data || []);
+    async function fetchData() {
+      try {
+        const { data } = await axios.get("/api/getPendingRentalReq");
+        setBookings(data);
+      } catch (error) {
+        console.error("Error fetching booking data:", error);
+      }
     }
-    FetchData();
+    fetchData();
   }, []);
+  console.log(bookings)
 
   useEffect(() => {
     if (state.success) {
-      toast.success("Action to the Request Success!");
+      toast.success(state.message);
       router.push("/cars");
       router.refresh();
     }
   }, [state, router]);
 
-  const [status, setStatus] = useState<string>("");
-
   return (
-    <section className="w-full flex flex-col justify-center items-center ">
+    <section className="w-full flex flex-col justify-center items-center">
       <h2 className="text-lg font-semibold pb-4">
         {bookings.length > 0 ? "Pending Requests for Your Car!" : "No Pending Requests for Your Car!"}
       </h2>
@@ -77,43 +81,47 @@ export function RentRequest() {
           </TableHeader>
           <TableBody>
             {bookings.length > 0 ? (
-              bookings.map((booking, index) =>
-                booking.rents?.appliedUsers.map((user, userIndex) => (
-                  <TableRow key={`${index}-${userIndex}`} className="border-b transition">
+              bookings.map((booking, index) => {
+                return (
+                  <TableRow key={index} className="border-b transition">
                     <TableCell className="table-padding">{index + 1}</TableCell>
-                    <TableCell className="table-padding">{booking.cars?.brand}</TableCell>
+                    <TableCell className="table-padding">{booking.rentals.car.brand ? booking.rentals.car.brand : "N/A"}</TableCell>
                     <TableCell className="table-padding">
-                      { booking.rents?.startDate ? new Date(booking.rents?.startDate).toLocaleDateString("en-GB", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      }) : "N/A"}
+                      {booking.rentals.startDate
+                        ? new Date(booking.rentals.startDate).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "N/A"}
                     </TableCell>
                     <TableCell className="table-padding">
-                      {booking.rents?.endDate ? new Date(booking.rents?.endDate).toLocaleDateString("en-GB", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      }) : "N/A"}
+                      {booking.rentals.endDate
+                        ? new Date(booking.rentals.endDate).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "N/A"}
                     </TableCell>
-                    <TableCell className="table-padding">{user.id}</TableCell>
-                    <TableCell className="table-padding">{user.status}</TableCell>
+                    <TableCell className="table-padding">{booking.applicant.name}</TableCell>
+                    <TableCell className="table-padding">{booking.status}</TableCell>
                     <TableCell className="flex gap-3 table-padding">
-                      <form action={acceptBookingAction} className="flex gap-4">
-                        <Input type="hidden" defaultValue={booking.cars?.id} name="carId" />
-                        <Input type="hidden" defaultValue={booking.rents?.id} name="rentalId" />
-                        <Input type="hidden" defaultValue={user.id} name="userId" />
-                        <Input type="hidden" defaultValue={status} name="status" />
+                      <form action={accpetBookingAction} className="flex gap-4">
+                        <Input type="hidden" name="carId" defaultValue={booking.rentals.car.id} />
+                        <Input type="hidden" name="rentalId" defaultValue={booking.rentals.id} />
+                        <Input type="hidden" name="userId" defaultValue={booking.applicant.id} />
+                        <Input type="hidden" name="status" defaultValue={status} />
                         <Button
+                        onClick={()=>setStatus("NO")}
                           type="submit"
-                          onClick={() => setStatus("NO")}
                           className="text-white bg-red-400 hover:bg-red-500/50"
                         >
                           <Delete />
                         </Button>
                         <Button
+                        onClick={()=>setStatus("YES")}
                           type="submit"
-                          onClick={() => setStatus("YES")}
                           className="text-white bg-green-400 hover:bg-green-500/50"
                         >
                           <Check />
@@ -121,8 +129,8 @@ export function RentRequest() {
                       </form>
                     </TableCell>
                   </TableRow>
-                ))
-              )
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-4">

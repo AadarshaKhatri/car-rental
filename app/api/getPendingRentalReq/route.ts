@@ -7,41 +7,74 @@ export async function GET (){
   try{
     const user  = await getUserId();
     if(!user) return null
-    const data = await prisma.booking_model.findMany({
-      select:{
-        cars:{
-        select:{
-          id:true,
-          brand:true,
-          pricePerDay:true,
+    // const data = await prisma.car_model.findMany({
+    //   where:{
+    //     rentals:{
+    //         every:{
+    //           appliedUsers:{
+    //             every:{
+    //               status:"PENDING",
+    //             }
+    //           }
+    //         },
+    //     },
+    //     authorId:user,        
+    //   },
+    //   include:{
+    //     rentals:{
+    //       select:{
+    //         startDate:true,
+    //         endDate:true,
+    //         appliedUsers:{
+    //           select:{
+    //             status:true,
+    //             applicant:{
+    //               select:{
+    //                 name:true,
+    //                 id:true,
+    //               }
+    //             }
+    //           }
+    //         }
+    //       }
+    //     },
+        
+    //   }
+    // })
+
+    const data = await prisma.applied_users.findMany({
+      where:{
+        rentals:{
+          
+          authorId:user
         }
+      },
+      select:{
+        status:true,
+        applicant:{
+          select:{  
+            name:true,
+            id:true,
+          }
         },
-        rents:{
+        rentals:{
           select:{
+            id:true,
             startDate:true,
             endDate:true,
-            id:true,
-            appliedUsers:{
+            car:{
               select:{
-                status:true,
+                brand:true,
                 id:true,
               }
-            }
-          }
-        }
-      },
+            },
+          } 
+        },
 
-      where:{
-        rents:{
-          is:{
-            authorId:user,
-          }
-        }
-      },
+      }
     })
+    console.log("Request", JSON.stringify(data, null, 2));
 
-   
-    console.log(data);
     return NextResponse.json(data);
   }catch(error){
     console.log("Error Fetching the data",error)

@@ -263,58 +263,72 @@ export async function acceptBooking(prevState:PrevState,formData:FormData) : Pro
   try{
     const user = await getUserId();
     if(!user) return {success:false,error:"No User!",message:null};
-    await prisma.$transaction([
-      prisma.booking_model.create({
-        data:{
-              cars:{
-                connect:{
-                  id:formData.get("carId") as string,
+    if(formData.get("status") as string === "YES") {
+      await prisma.$transaction([
+        prisma.booking_model.create({
+          data:{
+                cars:{
+                  connect:{
+                    id:formData.get("carId") as string,
+                  }
+                },
+                booked_user:{
+                  connect:{
+                    id:formData.get("userId") as string
+                  }
+                },
+                rents:{
+                  connect:{
+                    id:formData.get("rentalId") as string,
+                  }
                 }
-              },
-              booked_user:{
-                connect:{
-                  id:user
-                }
-              },
-              rents:{
-                connect:{
-                  id:formData.get("rentalId") as string,
-                }
-              }
-        }
-      }),
-       prisma.applied_users.update({
-        where:{
-          id:formData.get("applicantId") as string,
-        },
-        data:{
-          status:formData.get("status") as string ==="YES" ? "APPROVED" : "NOT_APPLIED",
-        }
-      }),
-
-      prisma.car_model.update({
-        where:{
-          id:formData.get("carId") as string,
-        },
-        data:{
-          status:formData.get("status") as string ==="YES" ? "RENTED" : "AVAILABLE",
-        }
-      }),
-      prisma.applied_users.deleteMany({
-        where:{
-          rentalId:formData.get("rentalId") as string,
-          status:"PENDING",
-          id:{
-            not:formData.get("applicantId") as string,
           }
+        }),
+        prisma.applied_users.update({
+          where:{
+            id:formData.get("userId") as string,
+          },
+          data:{
+            status:formData.get("status") as string ==="YES" ? "APPROVED" : "PENDING",
+          }
+        }),
+  
+        prisma.car_model.update({
+          where:{
+            id:formData.get("carId") as string,
+          },
+          data:{
+            status:formData.get("status") as string ==="YES" ? "RENTED" : "AVAILABLE",
+          }
+        }),
+  
+        prisma.applied_users.deleteMany({
+          where:{
+            rentalId:formData.get("rentalId") as string,
+            status:"PENDING",
+            id:{
+              not:formData.get("applicantId") as string,
+            }
+          }
+        })
+  
+      ])
+      return {
+        success:true,
+        error:null,
+        message:"Booking Successfully Accepted!"
+      }
+    }else{
+      await prisma.applied_users.delete({
+        where:{
+          id:formData.get("userId") as string,
         }
       })
-
-    ])
-    return {
-      success:true,
-      error:null,
-      message:"Booking Successfully Accepted!"
+      return {
+        success:true,
+        error:null,
+        message:"Request Rejected"
+      }
     }
 
   }catch(error){
