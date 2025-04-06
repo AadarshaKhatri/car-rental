@@ -306,9 +306,6 @@ export async function acceptBooking(prevState:PrevState,formData:FormData) : Pro
           where:{
             rentalId:formData.get("rentalId") as string,
             status:"PENDING",
-            id:{
-              not:formData.get("applicantId") as string,
-            }
           }
         })
   
