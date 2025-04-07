@@ -44,8 +44,8 @@ export async function GET (){
 
     const data = await prisma.applied_users.findMany({
       where:{
+        status:"PENDING",
         rentals:{
-          
           authorId:user
         }
       },
