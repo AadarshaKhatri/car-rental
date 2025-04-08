@@ -18,7 +18,15 @@ export async function GET (){
         rentals:{
           some:{
             status:"AVAILABLE",
+            appliedUsers:{
+              some:{
+                status:{
+                  not:"APPROVED"
+                }
+              }
+            }
           }
+
         },
        author:{
         id:{

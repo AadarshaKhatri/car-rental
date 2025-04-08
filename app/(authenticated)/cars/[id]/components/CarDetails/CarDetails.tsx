@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import axios from "axios";
-import { Armchair, Calendar, Fuel, KeySquare, User } from "lucide-react";
+import { Armchair, Calendar, Edit, Fuel, KeySquare } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { bookforRental } from "../../../actions/action";
@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { CarModel } from "@/lib/types";
 import { toast } from "sonner";
 import { useActionState } from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 
 interface AppliedUsers{
@@ -72,13 +73,13 @@ const CarDetails = ({ id }: { id: string }) => {
       <Card className="w-full rounded-lg border-0 md:px-20">
         <CardContent className="flex flex-col md:flex-row gap-10 p-6">
           {/* Image Placeholder */}
-          <div className="w-full md:w-[450px] h-72 bg-gray-700 rounded-lg flex items-center justify-center">
+          <div className="w-full md:w-[490px] h-72 bg-gray-700 rounded-lg flex items-center justify-center">
             <span className="text-gray-400">Car Image Placeholder</span>
           </div>
 
           {/* Car Details */}
           <div className="flex-1 flex flex-col gap-5">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-center">
               <h2 className="text-2xl font-semibold text-white">
                 {cars?.brand}
               </h2>
@@ -86,31 +87,23 @@ const CarDetails = ({ id }: { id: string }) => {
               {/* Show rental request count if it's the owner's view */}
               {cars?.authorId === id && (
                 <div className="flex items-center gap-2 text-gray-400">
-                  <User className="w-4 h-4" />
-                  <p className="text-sm">
-                    {cars?.rentals
-                      ? `${cars.rentals.map((users)=> users.appliedUsers.length)} request(s)`
-                      : "No requests yet"}
-                  </p>
+                  <Button variant={"ghost"}>
+                  <Edit className="w-4 h-4" />
+                <p className="text-md">Edit</p>
+              </Button>
                 </div>
               )}
             </div>
-
-            <p className="text-white/50">
-             Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum non id consequatur ratione qui voluptate blanditiis animi tempora dolore harum!
-            </p>
-            
-
             {
               cars?.authorId === id ? 
-              <h4 className="text-md font-semibold text-primary">
-              Your Car Information
-            </h4>
-            :
-            <h4 className="text-md font-semibold text-primary">
-             Car Information
-            </h4>
+              <div className="text-sm text-white/70">
+              <strong>Owner:</strong> {cars?.authorId}
+            </div>
+              : 
+              null
             }
+          
+
             <div className="grid grid-cols-2 gap-3">
               {cardContents.map(({ value, icon: Icon, label }, index) => (
                 <div key={index} className="flex items-center gap-2">
@@ -131,6 +124,7 @@ const CarDetails = ({ id }: { id: string }) => {
                     Available Rental Dates:
                   </p>
                   <div className="flex flex-wrap gap-3">
+
                     {cars.rentals.map((rental) => (
                       <div
                         key={rental.id}
@@ -167,28 +161,41 @@ const CarDetails = ({ id }: { id: string }) => {
               cars?.rentals?.length ? (
                 <>
                   <p className="text-sm text-gray-300 mt-2">
-                    Avialble Dates of the Car
+                    Rental Information of the Car
                   </p>
-                  <div className="flex flex-wrap gap-3">
-                    {cars.rentals.map((rental) => (
-                      <div
-                        key={rental.id}
-                        className={`py-2 px-4 rounded-md text-sm bg-gray-900 transition-colors text-primary`}
-                      >
-                        {new Date(rental.startDate).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}{" "}
-                        -{" "}
-                        {new Date(rental.endDate).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </div>
-                    ))}
-                  </div>
+                  <Table className="w-full table-fixed">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className=" px-4 py-3 whitespace-nowrap">Rental Id</TableHead>
+                        <TableHead className="px-4 py-3 whitespace-nowrap">Start Date</TableHead>
+                        <TableHead className="px-4 py-3 whitespace-nowrap">End Date</TableHead>
+                        <TableHead className="px-4 py-3  whitespace-nowrap">Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {cars.rentals.map((rental, index) => (
+                        <TableRow key={rental.id}>
+                          <TableCell className=" text-center px-4 py-3 whitespace-nowrap">{index + 1}</TableCell>
+                          <TableCell className="px-4 py-3 whitespace-nowrap">
+                            {new Date(rental.startDate).toLocaleDateString("en-GB", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </TableCell>
+                          <TableCell className="px-4 py-3 whitespace-nowrap">
+                            {new Date(rental.endDate).toLocaleDateString("en-GB", {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </TableCell>
+                          <TableCell className="px-4 py-3 whitespace-nowrap">{rental.status}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+
                 </>
                  ) : (
                   <p className="text-sm text-gray-400 mt-2">
@@ -207,22 +214,24 @@ const CarDetails = ({ id }: { id: string }) => {
               </p>
               {
                 cars?.authorId === id ? 
-                  <Button>Edit Information</Button>
+                  <Button disabled>Rent Now</Button>
                 :
-              <form
-                action={requestBookingAction}
-                className="flex gap-2 items-center"
-              >
-                <Input name="carId" className="hidden" defaultValue={cars?.id} />
-                <Input
-                  name="rentalId"
-                  className="hidden"
-                  defaultValue={selectedRentalId}
-                />
-                <Button type="submit">Rent Now</Button>
-              </form>
+                  <form
+                    action={requestBookingAction}
+                    className="flex gap-2 items-center"
+                  >
+                    <Input name="carId" className="hidden" defaultValue={cars?.id} />
+                    <Input
+                      name="rentalId"
+                      className="hidden"
+                      defaultValue={selectedRentalId}
+                    />
+                    <Button type="submit">Rent Now</Button>
+                  </form>
               }
             </div>
+
+
           </div>
         </CardContent>
       </Card>
