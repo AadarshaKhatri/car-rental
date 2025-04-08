@@ -8,7 +8,6 @@ export async function GET (){
     if(!user) return null
     const data = await prisma.car_model.findMany({
       include:{
-      
         author:{
           select:{
             name:true,
@@ -17,7 +16,7 @@ export async function GET (){
       },
       where:{
         rentals:{
-          every:{
+          some:{
             status:"AVAILABLE",
           }
         },

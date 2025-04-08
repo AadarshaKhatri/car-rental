@@ -45,7 +45,6 @@ const CarsForRental = () => {
                 mileage={rentalCar.mileage}
                 no_seats={rentalCar.no_seats}
                 pricePerDay={rentalCar.pricePerDay}
-                status={rentalCar.status}
                 transmission={rentalCar.transmission}
                 year={rentalCar.year}
                 authorId={rentalCar.authorId}

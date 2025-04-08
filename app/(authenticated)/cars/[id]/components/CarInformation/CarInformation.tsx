@@ -1,6 +1,7 @@
 import { getUserId } from "@/app/(notauthenticated)/session";
 import CarDetails from "../CarDetails/CarDetails";
 import TicketDetails from "../TicketDetails/TicketDetails";
+import { redirect } from "next/navigation";
 
 
 
@@ -8,12 +9,12 @@ import TicketDetails from "../TicketDetails/TicketDetails";
 
 const CarInformation = async () => {
   const userId = await getUserId();
-  console.log(userId);
+ if(!userId) return redirect("/login");
     return (
     <section className="w-full flex justify-center items-center pb-20">
       <div className="flex flex-col justify-center items-center">
       
-      <CarDetails/>
+      <CarDetails id={userId}/>
       <TicketDetails/>
       </div>
     </section>

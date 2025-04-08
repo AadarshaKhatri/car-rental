@@ -24,12 +24,7 @@ const Cars =(props:CarProps) => {
     <section>
         <div>
               <Card className="relative w-[290px] px-3 gap-3">
-                {
-                  props.status === "AVAILABLE" ? 
-                  <span className="absolute right-5 bottom-42 text-sm bg-green-500 px-2 py-1 rounded text-background">Available</span>
-                  :
-                  null
-                }
+            
                 <Image
                 src="/"
                 alt="Car Iamges"

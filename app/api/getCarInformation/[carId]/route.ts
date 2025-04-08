@@ -26,7 +26,7 @@ export async function GET (  request: Request,
             id:true,
             startDate:true,
             endDate:true,
-           
+            status:true,
             appliedUsers:{
               select:{
                 applicantId:true,
