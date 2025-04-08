@@ -19,7 +19,6 @@ import { useRouter } from "next/navigation";
 const CreateCarForm = () => {
   const router = useRouter();
   const [transmission, setTransmission] = useState<string>("");
-  const [status,setStatus] = useState<string>("");
   const [state, CreateCarsAction] = useActionState(createCars, {
     success:false,
     message:null,
@@ -39,7 +38,7 @@ const CreateCarForm = () => {
     if (state?.success) {
       toast.success("Car Created!")
       setTransmission("")
-      setStatus("")
+     
       router.refresh()
     } else if (state?.error_msg) {
       Object.entries(state.error_msg).forEach(([key,value]) => {
@@ -64,24 +63,7 @@ const CreateCarForm = () => {
           </div>
           <Input name="no_seats" type="number" placeholder="Number of Seats" className="w-full py-6" />
 
-          <Select onValueChange={(value) => setStatus(value)} required>
-            <SelectTrigger className="w-full py-6 bg-gray-800 text-white border border-muted rounded-md">
-              <SelectValue placeholder="Select the Availability of the Car" />
-            </SelectTrigger>
-            <SelectContent className="w-full bg-gray-900 border border-muted rounded-md shadow-lg">
-              <SelectGroup>
-                <SelectItem value="Available" className="px-6 py-2 cursor-pointer hover:bg-gray-100">
-                  Available
-                </SelectItem>
-                <SelectItem value="Not Available" className="px-6 py-2 cursor-pointer hover:bg-gray-100">
-                 Not Available
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          {/* Hidden Input to store transmission value */}
-          <Input type="text" className="hidden" value={status} name="status" readOnly />
+         
 
 
 

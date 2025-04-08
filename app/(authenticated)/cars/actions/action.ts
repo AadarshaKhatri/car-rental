@@ -28,7 +28,7 @@ export async function createCars(prevState: createCarState, formData: FormData) 
       MFD_Date: Number(formData.get("mfd_date") as string),
       transmission: formData.get("transmission") as string,
       pricePerDay: Number(formData.get("pricing") as string),
-      status:formData.get("status") as string,
+      
     });
     console.log("Validation result:", success);
     console.log("Validation Errors",error) // Log validation result
@@ -49,7 +49,7 @@ export async function createCars(prevState: createCarState, formData: FormData) 
         error: "Failed to Validate",
         message: null,
         error_msg: {
-          status:error.flatten().fieldErrors.status,
+        
           mileage:error.flatten().fieldErrors.mileage,
           brand: error?.flatten().fieldErrors.brand,
           Seats: error?.flatten().fieldErrors.no_seats,
@@ -62,7 +62,6 @@ export async function createCars(prevState: createCarState, formData: FormData) 
 
    await prisma.car_model.create({
       data:{
-        status:formData.get("status") as string === "Available" ? "AVAILABLE" : "NOT_AVAILABLE",
         brand:formData.get("brand") as string,
         no_seats:Number(formData.get("no_seats") as string),
         pricePerDay:Number(formData.get("pricing") as string),
@@ -108,7 +107,8 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
       }
     }
     const newRental = await prisma.rental_model.create({
-      data:{
+      data:{ 
+        status:formData.get("status") as string === "Available" ? "AVAILABLE":"NOT_AVAILABLE",
         author:{
           connect:{
             id:String(user),
@@ -296,9 +296,9 @@ export async function acceptBooking(prevState: PrevState, formData: FormData): P
         }),
 
         // Update car status to RENTED
-        prisma.car_model.update({
+        prisma.rental_model.update({
           where: {
-            id: formData.get("carId") as string,
+            id: formData.get("rentalId") as string,
           },
           data: {
             status: "RENTED",

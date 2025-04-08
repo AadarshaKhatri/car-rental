@@ -21,6 +21,7 @@ const RentCarForm = () => {
   const router = useRouter()
   const [avaliableCars, setAvailableCars] = useState<CarModel []>();
   const [carID,setCarId] = useState<string>("");
+  const [status,setStatus] = useState<string>("");
   const [state,createRentalAction] = useActionState(createRentals, {
     success:false,
     error:null,
@@ -44,6 +45,7 @@ const RentCarForm = () => {
     if(state?.success){
       toast.success("Renal Car Added!")
       setAvailableCars([]);
+      setStatus("");
       router.refresh();
       }else if (!state?.success && state?.error) {
         toast.error("Failed to make your car available for rental!")
@@ -90,6 +92,25 @@ const RentCarForm = () => {
           <Input name="endDate" type="date" className="w-full  py-6 flex justify-between"/>
         </label>
          </div>
+
+         <Select onValueChange={(value) => setStatus(value)} required>
+            <SelectTrigger className="w-full py-6 bg-gray-800 text-white border border-muted rounded-md">
+              <SelectValue placeholder="Select the Availability of the Car" />
+            </SelectTrigger>
+            <SelectContent className="w-full bg-gray-900 border border-muted rounded-md shadow-lg">
+              <SelectGroup>
+                <SelectItem value="Available" className="px-6 py-2 cursor-pointer hover:bg-gray-100">
+                  Available
+                </SelectItem>
+                <SelectItem value="Not Available" className="px-6 py-2 cursor-pointer hover:bg-gray-100">
+                 Not Available
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          {/* Hidden Input to store transmission value */}
+          <Input type="text" className="hidden" value={status} name="status" readOnly />
         <Button>Create Car</Button>
       </form>
     </div>

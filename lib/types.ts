@@ -12,7 +12,6 @@ export type CarModel = {
   brand:string
   mileage:number
   no_seats:number
-  status:string
   year:number
   transmission:string
   pricePerDay:Float16Array

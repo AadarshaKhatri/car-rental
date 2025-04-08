@@ -29,7 +29,6 @@ model car_model {
   transmission String
   pricePerDay  Float
   mileage      Int
-  status       CarStatus       @default(AVAILABLE)
   rentals      rental_model[]
   booking      booking_model[]
   author       user_model      @relation(fields: [authorId], references: [id])
@@ -44,6 +43,7 @@ model rental_model {
   authorId     String
   car          car_model       @relation(fields: [carId], references: [id])
   carId        String
+  status       CarStatus       @default(AVAILABLE)
   startDate    DateTime
   endDate      DateTime
   createdAt    DateTime        @default(now())

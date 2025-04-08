@@ -76,7 +76,6 @@ const CarsTable = () => {
                     <TableCell className="table-padding">{car.year}</TableCell>
                     <TableCell className="table-padding">{car.transmission}</TableCell>
                     <TableCell className="table-padding">{car.pricePerDay} per/day</TableCell>
-                    <TableCell className="table-padding">{car.status}</TableCell>
                   
                     <TableCell className="table-padding">
                     <form action={carDeleteAction}>

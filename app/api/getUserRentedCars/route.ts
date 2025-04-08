@@ -11,10 +11,8 @@ export async function GET(){
     const data = await prisma.booking_model.findMany({
       where:{
         bookedUserID:user,
-        cars:{
-          status:"RENTED",
-        },
         rents:{
+          status:"RENTED",
           appliedUsers:{
             every:{
               status:"APPROVED",

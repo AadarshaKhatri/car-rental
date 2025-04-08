@@ -22,8 +22,18 @@ export async function GET (  request: Request,
       },
       include:{
         rentals:{
-          include:{
-            appliedUsers:true,
+          select:{
+            id:true,
+            startDate:true,
+            endDate:true,
+           
+            appliedUsers:{
+              select:{
+                applicantId:true,
+                status:true,
+
+              }
+            },
           }
         },
         
