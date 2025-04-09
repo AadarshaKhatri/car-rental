@@ -15,7 +15,7 @@ const CarInformation = async () => {
       <div className="flex flex-col justify-center items-center">
       
       <CarDetails id={userId}/>
-      <TicketDetails/>
+      <TicketDetails id={userId}/>
       </div>
     </section>
   );

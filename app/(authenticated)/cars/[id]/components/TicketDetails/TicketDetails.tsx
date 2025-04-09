@@ -1,118 +1,206 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CarModel } from "@/lib/types";
+import { CarModel, RentalModel } from "@/lib/types";
 import axios from "axios";
-import { Armchair, Calendar, Car, Fuel, KeySquare } from "lucide-react";
+import { Armchair, Bell, Calendar, Car, Fuel, KeySquare, User } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface Booking {
-    booked_user: {
-      name: string;
-    };
-  }
-  
-  interface Rental {
+// --- Interfaces ---
+interface AppliedUser {
+  status:string,
+  applicant: {
+    name: string;
     id:string,
-    endDate: string; 
-    startDate: string; 
-    status: string;
-  }
-  
-  interface CarInformationTypes extends CarModel { 
-    booking: Booking [],
-    rentals: Rental []
-  }
-
-const TicketDetails = () => {
-  const params = useParams();
-  const [cars, setCars] = useState<CarInformationTypes>();
-
-    useEffect(()=>{
-      async function FetchData(){
-      const {data} = await axios.get(`/api/getCarInformation/${params.id}`);
-       setCars(data);
-      }
-      FetchData();
-    },[params]);
-
-  useEffect(()=>{
-    async function FetchData(){
-    const {data} = await axios.get(`/api/getCarInformation/${params.id}`);
-     setCars(data);
-    }
-    FetchData();
-  },[params]);
-
-  const cardContents = [
-    {label:"Company", icon:Fuel,value:`${cars?.mileage} L`},
-    {label:"Transmission", icon:KeySquare,value:`${cars?.transmission}`},
-    {label:"MFD", icon:Calendar,value:`${cars?.year}`},
-    {label:"Seats", icon:Armchair,value:`${cars?.no_seats}`},
-  
-    
-  ]
-  return (
-          <Card className="w-full rounded-xl border border-gray-800 text-white px-10 mt-6  relative">
-          <CardContent className="p-6">
-
-            {/* Ticket Header */}
-            <div className="flex items-center gap-3 mb-4">
-              <Car className="text-primary w-8 h-8" />
-              <h2 className="text-2xl font-bold text-primary">Booking Confirmation</h2>
-            </div>
-
-            {/* Ticket Body */}
-            <div className="relative border-dashed border-t border-gray-600 my-4"></div> {/* Dashed Divider */}
-
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-between">
-                <p className="text-md font-semibold text-gray-300">Booked By:</p>
-                <p className="text-md text-white">Your Name</p>
-              </div>
-
-              <div className="flex justify-between">
-                <p className="text-md font-semibold text-gray-300">Start Date:</p>
-                <div className="flex items-center gap-2">
-                  <Calendar className="text-blue-400 w-4 h-4" />
-                  <p className="text-md text-white">October 10, 2025</p>
-                </div>
-              </div>
-
-              <div className="flex justify-between">
-                <p className="text-md font-semibold text-gray-300">End Date:</p>
-                <div className="flex items-center gap-2">
-                  <Calendar className="text-blue-400 w-4 h-4" />
-                  <p className="text-md text-white">October 15, 2025</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Dashed Divider */}
-            <div className="relative border-dashed border-t border-gray-600 my-4"></div>
-
-            {/* Car Details in Ticket */}
-            <div className="grid grid-cols-2 gap-3 text-gray-300 text-md">
-              {cardContents.map(({ value, icon: Icon, label }, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-primary" />
-                  <p className="text-md text-white/70">{label}:</p>
-                  <p className="text-md text-white/50">{value}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Ticket Footer */}
-            <div className="mt-6 flex justify-center">
-              <Button className="bg-yellow-500 text-gray-900 hover:bg-yellow-600">
-                Download Ticket
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-  )
+  };
 }
 
-export default TicketDetails
+interface BookedByUser {
+  booked_user: {
+    name: string;
+    id: string;
+  };
+}
+interface Author{
+  name:string,
+  id:string,
+}
+
+interface TicketDetailsTypes extends RentalModel {
+  appliedUsers: AppliedUser[];
+  car: CarModel;
+  author: Author
+  bookedBy: BookedByUser[]; // Updated: now reflects the array structure
+}
+
+const TicketDetails = ({ id }: { id: string }) => {
+  const params = useParams();
+  const [tickets, setTickets] = useState<TicketDetailsTypes[]>();
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data } = await axios.get(`/api/getBookingInformation/${params.id}`);
+      setTickets(data);
+    }
+    fetchData();
+  }, [params]);
+
+  return (
+    <div className="w-full">
+      {tickets?.map((ticket, index) => {
+        if (ticket.status !== "RENTED") return null;
+
+        const bookedUser = ticket.bookedBy?.[0]?.booked_user;
+        const isOwner = ticket.authorId === id;
+        const isRenter = bookedUser?.id === id;
+
+        if (!isOwner && !isRenter) return null;
+
+    
+
+        const startDate = new Date(ticket.startDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        const endDate = new Date(ticket.endDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        return (
+          <Card
+          key={index}
+          className="w-full rounded-xl border border-gray-800 text-white px-10 mt-6 relative"
+        >
+          <CardContent className="p-6">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-4">
+              <Car className="text-primary w-8 h-8" />
+              <h2 className="text-2xl font-bold text-primary">
+                {isOwner ? "Your Car's Booking Information" : "Booking Information"}
+              </h2>
+            </div>
+        
+            <div className="border-t border-dashed border-gray-600 my-6" />
+        
+            {/* Booking Information */}
+            <h3 className="text-lg font-semibold text-white mb-4">Booking Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <KeySquare className="w-4 h-4 text-primary" />
+                  <p>Booked By:</p>
+                </div>
+                <p className="text-md text-white font-semibold">
+                  {ticket.bookedBy.length !== 0 ? bookedUser?.name : "Not Booked"}
+                </p>
+              </div>
+        
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <Car className="w-4 h-4 text-primary" />
+                  <p>Car Name:</p>
+                </div>
+                <p className="text-md text-white font-semibold">{ticket.car.brand}</p>
+              </div>
+        
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <User className="w-4 h-4 text-primary" />
+                  <p>Owner:</p>
+                </div>
+                <p className="text-md text-white font-semibold">{ticket.author.name}</p>
+              </div>
+     
+        
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <Bell className="w-4 h-4 text-primary" />
+                  <p>Status:</p>
+                </div>
+                <p className="text-md font-semibold text-green-500">
+                  {ticket.appliedUsers.map((user) => user.status).join(", ")}
+                </p>
+              </div>
+        
+        
+        
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <Calendar className="w-4 h-4 text-blue-400" />
+                  <p>Start Date:</p>
+                </div>
+                <p className="text-md text-white font-semibold">{startDate}</p>
+              </div>
+        
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <Calendar className="w-4 h-4 text-blue-400" />
+                  <p>End Date:</p>
+                </div>
+                <p className="text-md text-white font-semibold">{endDate}</p>
+              </div>
+            </div>
+        
+            <div className="border-t border-dashed border-gray-600 my-6" />
+        
+            {/* Car Information */}
+            <h3 className="text-lg font-semibold text-white mb-4">Car Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <Armchair className="w-4 h-4 text-primary" />
+                  <p>Seats:</p>
+                </div>
+                <p className="text-md text-white font-semibold">{ticket.car.no_seats}</p>
+              </div>
+
+                 
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <Fuel className="w-4 h-4 text-primary" />
+                  <p>Mileage:</p>
+                </div>
+                <p className="text-md text-white font-semibold">{ticket.car.mileage} L</p>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <KeySquare className="w-4 h-4 text-primary" />
+                  <p>Transmission:</p>
+                </div>
+                <p className="text-md text-white font-semibold">{ticket.car.transmission}</p>
+              </div>
+        
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <p>MFD:</p>
+                </div>
+                <p className="text-md text-white font-semibold">{ticket.car.year}</p>
+              </div>
+            </div>
+        
+            {/* Download Button */}
+            {isRenter && (
+              <div className="mt-10 flex justify-center">
+                <Button className="bg-secondary text-gray-900">Download Ticket</Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+        
+        );
+      })}
+    </div>
+  );
+};
+
+
+
+export default TicketDetails;

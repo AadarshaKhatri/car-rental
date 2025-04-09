@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { Armchair, Calendar, Car, Fuel, KeySquare } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface CarModel {
@@ -39,6 +40,7 @@ const RentedCars = () => {
   }, []);
 
   return (
+    <Link href={`/cars/${rentedCars.map((car)=> car.carId )}`}>
     <div className="w-[350px]">
       <h2 className="text-lg text-center pb-5">Cars you have rented!</h2>
       {rentedCars.length === 0 ? (
@@ -95,6 +97,7 @@ const RentedCars = () => {
         </div>
       )}
     </div>
+    </Link>
   );
 };
 

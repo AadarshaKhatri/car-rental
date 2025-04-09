@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import axios from "axios";
-import { Armchair, Calendar, Edit, Fuel, KeySquare } from "lucide-react";
+import { Armchair, Calendar, Fuel, KeySquare } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { bookforRental } from "../../../actions/action";
@@ -12,6 +12,7 @@ import { CarModel } from "@/lib/types";
 import { toast } from "sonner";
 import { useActionState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import EditCarDialogue from "../EditCarDialogue/EditCarDialogue";
 
 
 interface AppliedUsers{
@@ -87,10 +88,7 @@ const CarDetails = ({ id }: { id: string }) => {
               {/* Show rental request count if it's the owner's view */}
               {cars?.authorId === id && (
                 <div className="flex items-center gap-2 text-gray-400">
-                  <Button variant={"ghost"}>
-                  <Edit className="w-4 h-4" />
-                <p className="text-md">Edit</p>
-              </Button>
+                  <EditCarDialogue/>
                 </div>
               )}
             </div>
