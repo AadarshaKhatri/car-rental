@@ -121,7 +121,7 @@ const CarDetails = ({ id }: { id: string }) => {
             {
               cars?.authorId !== id  ?
               (
-                cars?.rentals?.length ? (
+                cars?.rentals ? (
                 <>
                   <p className="text-sm text-gray-300 mt-2">
                     Available Rental Dates:
@@ -129,6 +129,7 @@ const CarDetails = ({ id }: { id: string }) => {
                   <div className="flex flex-wrap gap-3">
 
                     {cars.rentals.map((rental) => (
+                      rental.status === "AVAILABLE" ?
                       <div
                         key={rental.id}
                         onClick={() => handleTabSelect(rental.id)}
@@ -149,6 +150,12 @@ const CarDetails = ({ id }: { id: string }) => {
                           month: "short",
                           year: "numeric",
                         })}
+                      </div>
+                      :
+                      <div key={rental.id}>
+                         <p className="text-sm text-red-200 mt-2">
+                          No dates available.
+                        </p>
                       </div>
                     ))}
                   </div>
