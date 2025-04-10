@@ -36,6 +36,12 @@ export async function GET (  request: Request,
             },
           }
         },
+        author:{
+          select:{
+            name:true,
+            id:true,
+          }
+        }
         
       }
     })

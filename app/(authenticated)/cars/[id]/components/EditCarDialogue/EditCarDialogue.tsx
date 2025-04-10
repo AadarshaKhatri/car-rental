@@ -17,11 +17,20 @@ import { useParams } from "next/navigation"
 import { useActionState, useEffect, useState } from "react"
 import { UpdateCar } from "./action"
 import { toast } from "sonner"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 
 const EditCarDialogue = () => {
   const params = useParams();
   const [car,setCar] = useState<CarModel>();
+  const [transmission, setTransmission] = useState<string>("");
+
   const [state,updateCarAction] = useActionState(UpdateCar,{
     success:false,
     error:null,
@@ -29,9 +38,8 @@ const EditCarDialogue = () => {
   });
 
 
-  if(state.success){
-    toast.success("Car has been updated!");
-  }
+
+
   useEffect(()=>{
     async function FetchData(){
       const {data} = await axios.get(`/api/getCarInformation/${params.id}`)
@@ -39,6 +47,13 @@ const EditCarDialogue = () => {
     }
     FetchData();
   },[params]);
+
+  useEffect(()=>{
+    if(state.success){
+    toast.success(`${state.message}`)
+    
+    }
+  },[state])
 
   console.log("Data From Dialogue Box", car);
   return (
@@ -90,23 +105,35 @@ const EditCarDialogue = () => {
                 No of Seats
               </Label>
               <Input
-                id="seats"
+                name="seats"
                 defaultValue={car?.no_seats}
                 className="col-span-3"
               />
             </div>
 
             {/* Transmission */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Transmission
-              </Label>
-              <Input
-                name="transmission"
-                defaultValue={car?.transmission}
-                className="col-span-3"
-              />
-            </div>
+             <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="transmission" className="text-right">
+                  Transmission
+                </Label>
+                <div className="col-span-3">
+                  <Select
+                  
+                    onValueChange={(value) => setTransmission(value)}
+                    defaultValue={car?.transmission}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Transmission Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Manual">Manual</SelectItem>
+                      <SelectItem value="Auto">Auto</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {/* Hidden input to submit transmission value */}
+              <input type="hidden" name="transmission" value={transmission} readOnly />
 
               {/* Pricing */}
               <div className="grid grid-cols-4 items-center gap-4">
@@ -128,13 +155,13 @@ const EditCarDialogue = () => {
               </Label>
               <Input
               type="number"
-              name="mfd-date"
+              name="year"
               defaultValue={car?.year}
               className="col-span-3"
               />
             </div>
 
-            <Input name="carId" defaultValue={car?.id}/>
+            <Input className="hidden" name="carId" defaultValue={car?.id}/>
           </div>
           <DialogFooter>
             <Button type="submit">Save changes</Button>

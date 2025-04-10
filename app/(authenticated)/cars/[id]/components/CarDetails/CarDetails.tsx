@@ -29,7 +29,10 @@ interface Rental {
 }
 
 interface CarInformationTypes extends CarModel {
-
+  author:{
+    name:string,
+    id:string,
+  }
   rentals: Rental[];
 }
 
@@ -95,10 +98,12 @@ const CarDetails = ({ id }: { id: string }) => {
             {
               cars?.authorId === id ? 
               <div className="text-sm text-white/70">
-              <strong>Owner:</strong> {cars?.authorId}
+              <strong>Owner:</strong> Your Car
             </div>
               : 
-              null
+              <div className="text-sm text-white/70">
+              <strong>Owner:</strong> {cars?.author?.name}
+            </div>
             }
           
 
