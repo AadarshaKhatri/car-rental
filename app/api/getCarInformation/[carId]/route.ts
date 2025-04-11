@@ -1,3 +1,4 @@
+import { getUserId } from "@/app/(notauthenticated)/session";
 import prisma from "@/lib/prisma";
 import {  NextResponse } from "next/server";
 
@@ -5,6 +6,8 @@ import {  NextResponse } from "next/server";
 export async function GET (  request: Request,
   { params }: { params: Promise<{ carId: string }> }){
   try{
+    const userId = await getUserId();
+    if (!userId) return Response.json({ message: "Unauthorized" }, { status: 401 });
   const {carId} = await params;
     
     if(!carId){

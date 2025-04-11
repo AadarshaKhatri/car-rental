@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 export async function GET (){
   try{
     const user = await getUserId();
-    if(!user) return null
+    if (!user) return Response.json({ message: "Unauthorized" }, { status: 401 });
     const data = await prisma.car_model.findMany({
       include:{
         author:{

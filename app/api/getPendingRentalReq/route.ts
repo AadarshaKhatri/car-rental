@@ -6,42 +6,7 @@ import { NextResponse } from "next/server";
 export async function GET (){
   try{
     const user  = await getUserId();
-    if(!user) return null
-    // const data = await prisma.car_model.findMany({
-    //   where:{
-    //     rentals:{
-    //         every:{
-    //           appliedUsers:{
-    //             every:{
-    //               status:"PENDING",
-    //             }
-    //           }
-    //         },
-    //     },
-    //     authorId:user,        
-    //   },
-    //   include:{
-    //     rentals:{
-    //       select:{
-    //         startDate:true,
-    //         endDate:true,
-    //         appliedUsers:{
-    //           select:{
-    //             status:true,
-    //             applicant:{
-    //               select:{
-    //                 name:true,
-    //                 id:true,
-    //               }
-    //             }
-    //           }
-    //         }
-    //       }
-    //     },
-        
-    //   }
-    // })
-
+    if (!user) return Response.json({ message: "Unauthorized" }, { status: 401 });
     const data = await prisma.applied_users.findMany({
       where:{
         status:"PENDING",

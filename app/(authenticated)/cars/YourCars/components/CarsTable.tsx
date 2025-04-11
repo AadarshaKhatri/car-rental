@@ -53,7 +53,6 @@ const CarsTable = () => {
                   <TableHead className="table-padding">MFD Date</TableHead>
                   <TableHead className="table-padding">Transmission</TableHead>
                   <TableHead className="table-padding">Pricing</TableHead>
-                  <TableHead className="table-padding">Car Status</TableHead>
                   <TableHead className="table-padding">Delete Cars</TableHead>
                 </TableRow>
               </TableHeader>
@@ -85,7 +84,7 @@ const CarsTable = () => {
                       </TableCell>
                       <TableCell>
                       <Link className="w-full" href={`/cars/${car.id}`} passHref>
-                      <Navigation className="text-primary"/>
+                      <Button><Navigation className="text-sm"/></Button>
                       </Link>
                       </TableCell>
                       

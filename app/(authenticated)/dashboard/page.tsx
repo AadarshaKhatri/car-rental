@@ -1,9 +1,13 @@
+"use client"
 
 import LayoutWrapper from "../LayoutWrapper"
-import Cars from "../components/CarList/CarListCard"
+import RecommendedCars from "./components/RecommendedCars/RecommendedCars"
+import RentACar from "./components/RentACar/RentACar"
+
+
 
 const DashboardPage = () => {
-  
+ 
   return (
       <LayoutWrapper>
         <div className="w-full flex flex-col justify-between items-center gap-y-10">
@@ -11,27 +15,11 @@ const DashboardPage = () => {
           <div className="w-full h-60  bg-gray-400">
 
           </div>
-          <div className="w-full flex flex-col  justify-start items-start gap-5">
-            <h2>Popular Cars</h2>
 
-            <div className="flex flex-wrap justify-start items-center gap-5">
-              {/* Cards Here*/}
-              {Array.from({ length: 5 }).map((_, index) => (
-                <div key={index}><Cars/></div>
-                ))}
-            </div>
-          </div>
 
-          <div className="w-full flex flex-col  justify-start items-start gap-5 py-10">
-            <h2>Recommended Cars</h2>
+            <RecommendedCars/>
 
-            <div className="flex flex-wrap justify-start items-center gap-5">
-              {/* Cards Here*/}
-              {Array.from({ length: 5 }).map((_, index) => (
-                  <div key={index}><Cars/></div>
-                ))}
-            </div>
-          </div>
+            <RentACar/>
         </div>
        </LayoutWrapper>
 
