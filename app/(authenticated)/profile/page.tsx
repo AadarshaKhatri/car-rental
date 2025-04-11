@@ -1,10 +1,10 @@
 import LayoutWrapper from "../LayoutWrapper"
+import Analytics from "./Analytics/Analytics"
 
 const ProfilePage = () => {
   return (
     <LayoutWrapper>
-      <div>Profile Page</div>
-
+      <Analytics/>
     </LayoutWrapper>
   )
 }
