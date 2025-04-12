@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { PieChart } from "lucide-react"
-import { Cell, Pie, ResponsiveContainer,Tooltip } from "recharts"
+import { PieChart,Cell, Pie, ResponsiveContainer,Tooltip } from "recharts"
 
 const PieGraph = () => {
   const bookingSourceData = [

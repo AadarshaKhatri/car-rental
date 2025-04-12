@@ -60,6 +60,7 @@ model applied_users {
   applicantId   String
   status   RentalStatus @default(NOT_APPLIED)
   appliedAt DateTime @default(now())
+
 }
 
 model booking_model {
@@ -70,6 +71,7 @@ model booking_model {
   rentalId     String?
   cars         car_model?    @relation(fields: [carId], references: [id])
   carId        String?
+  createdAt    DateTime        @default(now())
 }
 
 enum CarStatus {

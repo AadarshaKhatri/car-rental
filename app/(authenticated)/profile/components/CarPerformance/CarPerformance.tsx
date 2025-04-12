@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart } from "lucide-react"
-import { Bar, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import {BarChart, Bar, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 const CarPerformance = () => {
   const carTypePerformanceData = [
