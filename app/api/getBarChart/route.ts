@@ -30,7 +30,6 @@ export async function GET(){
         value:manual_car,
       }
     ]
-    console.log("Bar Data",data);
     return NextResponse.json(data);
   }catch(error){
     console.log(error);

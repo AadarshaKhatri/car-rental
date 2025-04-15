@@ -1,29 +1,34 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {BarChart, Bar, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+
+
+
+const data = [
+  { brand: "Toyota", rentals: 18 },
+  { brand: "Honda", rentals: 14 },
+  { brand: "Tesla", rentals: 9 },
+  { brand: "Ford", rentals: 7 },
+  { brand: "Hyundai", rentals: 11 },
+]
+
 
 const CarPerformance = () => {
-  const carTypePerformanceData = [
-    { type: "SUV", bookings: 140, views: 320 },
-    { type: "Sedan", bookings: 110, views: 290 },
-    { type: "Hatchback", bookings: 90, views: 200 },
-    { type: "Truck", bookings: 60, views: 160 },
-    { type: "Electric", bookings: 40, views: 130 },
-  ]
-  
   return (
     <Card className="col-span-2">
     <CardHeader>
-      <CardTitle>Performance Breakdown by Car Type</CardTitle>
+      <CardTitle>Rentals by Car Brand</CardTitle>
     </CardHeader>
-    <CardContent className="h-[250px]">
+    <CardContent className="h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={carTypePerformanceData}>
-          <XAxis dataKey="type" stroke="#888" />
-          <YAxis stroke="#888" />
-          <Tooltip />
-          <Bar dataKey="views" stackId="a" fill="#c084fc" />
-          <Bar dataKey="bookings" stackId="a" fill="#60a5fa" />
-        </BarChart>
+        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+          <CartesianGrid />
+          <XAxis dataKey="brand" type="category" name="Brand" />
+          <YAxis dataKey="rentals" type="number" name="Rentals" />
+          <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+          <Scatter name="Rentals" data={data} fill="#60a5fa" />
+        </ScatterChart>
       </ResponsiveContainer>
     </CardContent>
   </Card>

@@ -21,11 +21,6 @@ const BarGraph = () => {
     FetchData();
   },[])
 
-  const monthlyData = [
-    { month: "Jan", views: 120, bookings: 90 },
-    { month: "Feb", views: 200, bookings: 150 },
-
-  ]
   return (
     <Card>
     <CardHeader>
