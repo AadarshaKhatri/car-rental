@@ -24,11 +24,11 @@ const BarGraph = () => {
   return (
     <Card>
     <CardHeader>
-      <CardTitle>Bookings Bar View</CardTitle>
+      <CardTitle>Car Transmission Types</CardTitle>
     </CardHeader>
     <CardContent className="h-[250px]">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data}>
+        <BarChart data={data} margin={{ top: 20, right: 20, bottom: 2, left: 20 }}>
           <XAxis dataKey="name" stroke="#888" />
           <YAxis stroke="#888" />
           <Tooltip/>

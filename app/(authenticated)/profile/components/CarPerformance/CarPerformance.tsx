@@ -1,38 +1,42 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-
-
-
-const data = [
-  { brand: "Toyota", rentals: 18 },
-  { brand: "Honda", rentals: 14 },
-  { brand: "Tesla", rentals: 9 },
-  { brand: "Ford", rentals: 7 },
-  { brand: "Hyundai", rentals: 11 },
-]
-
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { 
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer 
+} from "recharts"
 
 const CarPerformance = () => {
+  const [data, setData] = useState<{ brand: string, rentals: number }[]>([]);
+
+  useEffect(() => {
+    async function FetchData() {
+      const { data } = await axios.get("/api/getCarByFilter");
+      setData(data);
+    }
+    FetchData();
+  }, []);
+
+  console.log("Data", data);
+
   return (
     <Card className="col-span-2">
-    <CardHeader>
-      <CardTitle>Rentals by Car Brand</CardTitle>
-    </CardHeader>
-    <CardContent className="h-[300px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-          <CartesianGrid />
-          <XAxis dataKey="brand" type="category" name="Brand" />
-          <YAxis dataKey="rentals" type="number" name="Rentals" />
-          <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-          <Scatter name="Rentals" data={data} fill="#60a5fa" />
-        </ScatterChart>
-      </ResponsiveContainer>
-    </CardContent>
-  </Card>
-  )
-}
+      <CardHeader>
+      <CardTitle>Cars Categorized by Manufactured Year</CardTitle>
+      </CardHeader>
+      <CardContent className="h-[250px]">
+      <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={data} margin={{ top: 20, right: 20, bottom: 50, left: 20 }}>
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="Total_Cars" fill="#C27AFF" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
+  );
+};
 
-export default CarPerformance
+export default CarPerformance;
