@@ -1,33 +1,32 @@
-import { ImageIcon, Rocket
-} from "lucide-react"
+import { Lightbulb } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+const FunFactCard = () => {
 
+  const [fact,setFacts] = useState<string>();
+  useEffect(()=>{
+    async function FetchData(){
+      const {data} = await axios.get("/api/getFact");
+      if(data) setFacts(data);
+    }
+    FetchData();
+  },[])
 
-const Summary = () => {
   return (
     <Card>
-    <CardHeader>
-      <CardTitle>Social Summary</CardTitle>
-    </CardHeader>
-    <CardContent className="space-y-4">
-      <div className="flex justify-between items-center">
-        <div className="flex gap-2 items-center text-sm">
-          <ImageIcon className="w-4 h-4 text-purple-500" />
-          <span>239 Pictures</span>
-        </div>
-        <button className="text-xs text-blue-600 underline">Download</button>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex gap-2 items-center text-sm">
-          <Rocket className="w-4 h-4 text-pink-500" />
-          <span>5,453 Followers</span>
-        </div>
-        <button className="text-xs text-blue-600 underline">Find More</button>
-      </div>
-    </CardContent>
-  </Card>
-  )
-}
+      <CardHeader className="flex flex-row items-center gap-2">
+        <Lightbulb className="w-5 h-5 text-yellow-500" />
+        <CardTitle>Discover a Fun Fact About the Platform</CardTitle>
+      </CardHeader>
+      <CardContent className="w-full h-full flex items-center justify-center p-10">
+        <p className="text-md text-primary text-center">
+          {fact}
+        </p>
+      </CardContent>
+    </Card>
+  );
+};
 
-export default Summary
+export default FunFactCard;
