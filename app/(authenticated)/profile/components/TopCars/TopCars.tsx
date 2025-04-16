@@ -1,7 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import axios from "axios";
+import { useEffect, useState } from "react"
 
 
 const TopCars = () => {
+  const [data,setData] = useState();
+  useEffect(()=>{
+    async function FetchData(){
+      const {data} = await axios.get("/api/getMostRentedCars");
+      setData(data);
+    }
+    FetchData();
+  },[])
+  console.log("Rented Cars:",data);
   const topCars = [
     { name: "Hyundai Tucson", bookings: 92, rating: 4.8 },
     { name: "Tesla Model 3", bookings: 78, rating: 4.9 },

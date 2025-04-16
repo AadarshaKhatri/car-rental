@@ -17,9 +17,6 @@ const CarPerformance = () => {
     }
     FetchData();
   }, []);
-
-  console.log("Data", data);
-
   return (
     <Card className="col-span-2">
       <CardHeader>
