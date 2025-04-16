@@ -7,8 +7,7 @@ import { NextResponse } from "next/server";
 export async function GET(){
   try{
     const userId = await getUserId();
-    if(!userId) return NextResponse.json({message:"Unauthorized User"},{status:401});
-
+    if (!userId) return Response.json({ message: "Unauthorized" }, { status: 401 });
     const data = await prisma.user_model.findUnique({
       where:{
         id:userId

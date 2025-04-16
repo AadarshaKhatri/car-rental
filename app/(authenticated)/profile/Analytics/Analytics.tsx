@@ -10,6 +10,7 @@ import BarGraph from "../components/BarGraph/BarGraph"
 import CarPerformance from "../components/CarPerformance/CarPerformance"
 import TopCars from "../components/TopCars/TopCars"
 import Summary from "../components/Summary/Summary"
+import ExpensiveCars from "../components/ExpensiveCars/ExpensiveCars"
 
 
 
@@ -51,7 +52,7 @@ export default function Analytics() {
           <TopCars/>
         
          {/* HIgh Valued Rentals */}
-        <TopCars/>
+        <ExpensiveCars/>
 
         {/* Social Summary */}
         <Summary/>

@@ -1,37 +1,56 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {  CarModel, RentalModel } from "@/lib/types";
 import axios from "axios";
+import { Trophy } from "lucide-react";
 import { useEffect, useState } from "react"
 
+interface TopCarTypes extends CarModel {
+ 
+  rentals : RentalModel [],
+}
 
 const TopCars = () => {
-  const [data,setData] = useState();
+  const [data,setData] = useState<TopCarTypes []>();
   useEffect(()=>{
     async function FetchData(){
       const {data} = await axios.get("/api/getMostRentedCars");
-      setData(data);
+      if(data) return setData(data);
     }
     FetchData();
   },[])
-  console.log("Rented Cars:",data);
-  const topCars = [
-    { name: "Hyundai Tucson", bookings: 92, rating: 4.8 },
-    { name: "Tesla Model 3", bookings: 78, rating: 4.9 },
-    { name: "Toyota Corolla", bookings: 65, rating: 4.5 },
-    { name: "Ford Ranger", bookings: 58, rating: 4.3 },
-  ]
+
   return (
     <Card>
             <CardHeader>
-              <CardTitle>Top Performing Cars</CardTitle>
+              <CardTitle>Most Rented Cars</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {topCars.map((car, index) => (
+              {data?.map((topCars, index) => (
                 <div key={index} className="flex justify-between items-center border-b pb-2 last:border-none">
                   <div>
-                    <p className="text-sm font-medium text-primary">{car.name}</p>
-                    <p className="text-xs text-muted-foreground">{car.bookings} bookings</p>
+                    {
+                      topCars?.brand 
+                      ?
+                      <p className="text-sm font-medium text-primary">{topCars?.brand}</p>
+                      :
+                      null
+                    }
+                    <p className="text-xs text-muted-foreground">{topCars?.rentals?.length === 0 ? 0 : topCars?.rentals?.length} bookings</p>
                   </div>
-                  <span className="text-sm font-semibold text-yellow-500">⭐ {car.rating}</span>
+                  <span
+                    className={` flex items-center justify-center gap-2 text-md font-semibold ${
+                      index === 0
+                        ? "text-yellow-500"
+                        : index === 1
+                        ? "text-slate-500"
+                        : index === 2
+                        ? "text-amber-800"
+                        : "text-primary"
+                    }`}
+                  >
+                    {index + 1 <= 3 ? <Trophy className="h-5 w-5"/> : null} {index + 1}
+                  </span>
+
                 </div>
               ))}
             </CardContent>

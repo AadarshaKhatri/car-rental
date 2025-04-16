@@ -2,25 +2,26 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 
+
 export async function GET(){
-  console.log("API Most Rented Car Hit!")  
+  
   try{
     const cars = await prisma.car_model.findMany({
       orderBy: {
-        rentals: {
-          _count: 'desc', 
-        },
+        pricePerDay:"desc"
       },
       take: 5, // Limit to top 10 most rented cars
-      include: {
-        rentals: true, // Include rental data if needed
-      },
+      select:{
+        id:true,
+        brand:true,
+        pricePerDay:true,
+      }
     });
-
-    console.log("Rentals Count:",cars);
+    console.log("Expe:",cars);
     return NextResponse.json(cars);
+
   }catch(error){
     console.log(error);
-    return null
+    return null;
   }
 }
