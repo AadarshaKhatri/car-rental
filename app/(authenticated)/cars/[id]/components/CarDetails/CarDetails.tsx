@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useActionState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import EditCarDialogue from "../EditCarDialogue/EditCarDialogue";
+import Image from "next/image";
 
 
 interface AppliedUsers{
@@ -78,7 +79,21 @@ const CarDetails = ({ id }: { id: string }) => {
         <CardContent className="flex flex-col md:flex-row gap-10 p-6">
           {/* Image Placeholder */}
           <div className="w-full md:w-[490px] h-72 bg-gray-700 rounded-lg flex items-center justify-center">
-            <span className="text-gray-400">Car Image Placeholder</span>
+            
+            {
+              cars?.imageUrl ? 
+              <Image 
+                  src={`${cars?.imageUrl}`}
+                  alt="Car Image"
+                  height={100}
+                  width={100}
+                  priority={true}
+                  quality={100}
+                  className="w-full md:w-[890px] h-72 flex items-center justify-center"
+            />
+              :
+              null
+            }
           </div>
 
           {/* Car Details */}
@@ -209,7 +224,7 @@ const CarDetails = ({ id }: { id: string }) => {
                 </>
                  ) : (
                   <p className="text-sm text-gray-400 mt-2">
-                    You haven&appos;t made the car available for rental
+                    You haven&apos;t made the car available for rental
                   </p>
 
                  )

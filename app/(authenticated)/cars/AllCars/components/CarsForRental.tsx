@@ -11,6 +11,9 @@ import Cars from "@/app/(authenticated)/components/CarList/CarListCard";
 interface AllCarTypes extends CarModel {
   author: { 
     name:string,
+  },
+  _count:{
+    rentals:number,
   }
 }
 const CarsForRental = () => {
@@ -49,6 +52,7 @@ const CarsForRental = () => {
                 transmission={rentalCar.transmission}
                 year={rentalCar.year}
                 authorId={rentalCar.authorId}
+                rentals={rentalCar._count.rentals}
 
               />
                 

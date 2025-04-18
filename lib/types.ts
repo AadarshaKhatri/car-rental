@@ -15,6 +15,7 @@ export type CarModel = {
   year:number
   transmission:string
   pricePerDay:Float16Array
+  imageUrl?:string
 }
 
 export interface RentalModel extends CarModel {

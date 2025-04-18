@@ -34,7 +34,7 @@ const RentACar = () => {
                <h2>Rent A Car</h2>
               </div>
 
-            <div className="flex flex-wrap justify-start items-center gap-10">
+            <div className="flex flex-wrap justify-between items-center gap-4">
               {/* Cards Here*/}
       
               {cars?.map((car) => (
@@ -51,6 +51,7 @@ const RentACar = () => {
                   key={car.id}
                   id={car.id}
                   rentals={car._count.rentals}
+                  imageUrl={car.imageUrl}
                   />
                   </div>
                 ))}

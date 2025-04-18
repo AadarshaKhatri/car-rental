@@ -32,14 +32,21 @@ const Cars =(props:CarProps) => {
                 </div>
                   : null
                 }
-                
-                <Image
-                src="/"
+                {
+                  props.imageUrl ? 
+                  <Image
+                src={`${props.imageUrl}`}
                 alt="Car Iamges"
                 width={100}
                 height={100}
                 className="w-full h-[200px] text-white"
                 />
+                  :
+                  <div className="w-full h-[200px] flex items-center justify-center">
+                    <p className="w-full h-full text-sm text-secondary">Car Image Not Available</p>
+                  </div>
+                }
+                
                 <CardHeader className="px-0 flex justify-between items-center">
                   <CardTitle className="text-sm w-36 truncate overflow-hidden whitespace-nowrap">{props.brand}</CardTitle>
                   <CardDescription className="text-primary">{props.pricePerDay}<span className="text-secondary">/per hour</span></CardDescription>

@@ -27,7 +27,13 @@ export async function GET() {
           },
         },
       },
+      
       include: {
+       _count:{
+        select:{
+          rentals:true,
+        }
+       },
         author: {
           select: {
             name: true,
@@ -36,7 +42,7 @@ export async function GET() {
       },
     });
 
-    console.log(cars);
+    console.log("RentalCars",cars);
     return NextResponse.json(cars);
   } catch (err) {
     console.error("Failed to fetch cars:", err);

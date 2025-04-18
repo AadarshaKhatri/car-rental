@@ -29,6 +29,7 @@ export async function GET(){
         },
         cars:{
           select:{
+            imageUrl:true,
             brand:true,
             mileage:true,
             pricePerDay:true,
