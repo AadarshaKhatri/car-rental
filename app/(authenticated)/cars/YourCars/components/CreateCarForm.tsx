@@ -14,6 +14,7 @@ import { useActionState, useState, useEffect } from "react";
 import { createCars } from "../../actions/action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { ImageUploader } from "../../AllCars/components/ImageUploader";
 
 
 const CreateCarForm = () => {
@@ -33,7 +34,6 @@ const CreateCarForm = () => {
       status:[]
     }
   });
-
   useEffect(() => {
     if (state?.success) {
       toast.success("Car Created!")
@@ -87,6 +87,7 @@ const CreateCarForm = () => {
           {/* Hidden Input to store transmission value */}
           <Input type="text" className="hidden" value={transmission} name="transmission" readOnly />
 
+          <ImageUploader />
          
           <Button>Create Car</Button>
         </form>

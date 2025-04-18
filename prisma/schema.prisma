@@ -29,6 +29,7 @@ model car_model {
   transmission String
   pricePerDay  Float
   mileage      Int
+  imageUrl     String?
   rentals      rental_model[]
   booking      booking_model[]
   author       user_model      @relation(fields: [authorId], references: [id])

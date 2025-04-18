@@ -18,7 +18,7 @@ const AllCars = () => {
             <RentRequest />
           </div>
           
-          <div>
+          <div className="w-full">
             <CarsForRental />
           </div>
         </div>

@@ -26,10 +26,11 @@ const CarsForRental = () => {
      setRentalCars(data);
     }
     FetchData()
-  },[])
+  },[]);
+  console.log("Cars Avaliable for Rental",rentalCars)
   return (
-    <section>
-       <div className="mt-5 w-full flex flex-wrap justify-start items-start gap-12">
+    <section className="w-full pb-20">
+       <div className="mt-5 w-full flex flex-wrap justify-evenly items-start gap-12">
             {
               rentalCars?.length === 0 ? 
               <div className="">
@@ -50,8 +51,7 @@ const CarsForRental = () => {
                 authorId={rentalCar.authorId}
 
               />
-                <p>Name:{rentalCar.brand}</p>
-                <p>User:{rentalCar.authorId}</p>
+                
                 </div>
               ))
             }

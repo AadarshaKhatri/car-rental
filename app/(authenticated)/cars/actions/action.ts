@@ -2,6 +2,7 @@
 import {  getUserId } from "@/app/(notauthenticated)/session";
 import prisma from "@/lib/prisma";
 import { CarSchema } from "@/lib/schemas";
+import { supabase } from "@/lib/supabase";
 import { PrevState } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 
@@ -17,9 +18,17 @@ interface createCarState extends PrevState {
   } | undefined;
 }
 
+interface uploadFileResponse{
+  fileUrl?:string
+  success?:boolean,
+  error?:string
+  message?:string
+}
+
 // ================ Server Action to Create Cars =========================
 export async function createCars(prevState: createCarState, formData: FormData) : Promise<createCarState>{
   console.log("Car Create Hit!");
+  console.log("FormData",formData);
   try {
     const { success, error } = CarSchema.safeParse({
       no_seats: Number(formData.get("no_seats") as string),
@@ -30,10 +39,6 @@ export async function createCars(prevState: createCarState, formData: FormData) 
       pricePerDay: Number(formData.get("pricing") as string),
       
     });
-    console.log("Validation result:", success);
-    console.log("Validation Errors",error) // Log validation result
-
-
     const user = await getUserId();
     if(!user){
       return { 
@@ -42,6 +47,7 @@ export async function createCars(prevState: createCarState, formData: FormData) 
         message:null,
       }
     }
+
     if (!success) {
       return {
         ...prevState, // Preserve previous state
@@ -59,7 +65,12 @@ export async function createCars(prevState: createCarState, formData: FormData) 
         },
       };
     }
-
+  const {fileUrl} = await imageUploader(formData.get("image") as File);
+  if(!fileUrl) return {
+    success:false,
+    message:null,
+    error:"Faile to Upload the Image",
+  }
    await prisma.car_model.create({
       data:{
         brand:formData.get("brand") as string,
@@ -72,7 +83,8 @@ export async function createCars(prevState: createCarState, formData: FormData) 
           connect:{
             id:String(user)
           }
-        }
+        },
+        imageUrl:fileUrl,
       }
     });
 
@@ -177,7 +189,15 @@ export async function deleteCars(prevState: PrevState, formData: FormData): Prom
       });
     }
 
-    // Deleting the car
+    const cars = await prisma.car_model.findUnique({
+      where:{
+        id:formData.get("carId") as string,
+      }
+    })
+    if(cars?.imageUrl) {
+      await deleteImages(cars?.imageUrl);
+      console.log(await deleteImages(cars?.imageUrl))
+    }
     await prisma.car_model.delete({
       where: {
         id: formData.get("carId") as string,
@@ -347,5 +367,105 @@ export async function acceptBooking(prevState: PrevState, formData: FormData): P
   }
 }
 
+
+export async function imageUploader(file:File) : Promise<uploadFileResponse>{
+  console.log("Image Uploader!")
+  try {
+    if (!file) {
+      return {
+        success: false,
+        error: "No file uploaded!",
+      };
+    }
+    const fileName = `${Date.now()}_${file.name}`;
+
+    // Upload to Supabase
+    const { data, error } = await supabase.storage
+
+      .from("images") // Ensure this bucket exists in Supabase
+      .upload(`public/${fileName}`, file, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType:file.type
+      });
+
+    if (error) {
+      console.log(`${error.message}`)
+      return {
+        message:error.message,
+        success: false,
+        error: `Failed to upload image`,
+      };
+    }
+
+    // Get public URL
+    const url = supabase.storage.from("images").getPublicUrl(data.path);
+    console.log("Url here: ", data);
+    if (!url) {
+      return {
+       
+        success: false,
+        error: "Error retrieving file URL",
+      };
+    }
+    return {
+      success: true,
+      message: "File uploaded successfully!",
+      fileUrl: url.data.publicUrl,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message:`Error Message:${err}`,
+      error: "Failed to upload file!",
+    };
+  }
+}
+
+
+export async function deleteImages(imageUrl: string) {
+  try {
+    // Ensure the image URL starts with the correct prefix and decode the URL
+    const decodedImageUrl = decodeURIComponent(imageUrl);
+    const imagePath = decodedImageUrl.split('/public/images/')[1];  // Extract the image path after /public/images/
+
+    console.log("Decoded Image Url Being Deleted:", imagePath);
+
+    // Log the image path to verify it's correct
+    if (!imagePath) {
+      return {
+        success: false,
+        error: "Invalid image URL",
+        message: "Failed to extract a valid image path from the URL",
+      };
+    }
+
+    // Try to remove the image from the storage bucket
+    const { error,data } = await supabase.storage.from("images").remove([`${imagePath}`]);
+
+    console.log(data);
+    // Check if there is an error during the remove operation
+    if (error) {
+      return {
+        success: false,
+        error: error.message,
+        message: `Failed to delete the image: ${error.message}`,
+      };
+    }
+
+    // If data is returned, the image has been successfully deleted
+    return {
+      success: true,
+      message: "Image deleted successfully",
+      error: null,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: `Error Message: ${err}`,
+      error: "Error Deleting the Image",
+    };
+  }
+}
 
 

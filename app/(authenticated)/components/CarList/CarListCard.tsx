@@ -10,7 +10,7 @@ import Link from "next/link"
 
 interface CarProps extends CarModel {
   username:string,
-  rentals:number,
+  rentals?:number,
 }
 const Cars =(props:CarProps) => {
 
@@ -25,10 +25,14 @@ const Cars =(props:CarProps) => {
     <section>
         <div>
               <Card className="relative w-[290px] px-3 gap-3">
-                <div className="absolute bottom-40 right-3 px-2 py-1 bg-green-500/60 rounded-md ">
+                {
+                  props.rentals !== null ?
+                  <div className="absolute bottom-40 right-3 px-2 py-1 bg-green-500/60 rounded-md ">
                   <p className="text-xs text-background"><span className="text-semibold">{props.rentals}</span> available dates</p>
-
                 </div>
+                  : null
+                }
+                
                 <Image
                 src="/"
                 alt="Car Iamges"

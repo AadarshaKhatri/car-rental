@@ -1,44 +1,45 @@
 import { getUserId } from "@/app/(notauthenticated)/session";
-import prisma from "@/lib/prisma"
-import { NextResponse } from "next/server"
+import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
-export async function GET (){
-  try{
-    const user = await getUserId();
-    if (!user) return Response.json({ message: "Unauthorized" }, { status: 401 });
-    const data = await prisma.car_model.findMany({
-      include:{
-        author:{
-          select:{
-            name:true,
-          }
-        }
-      },
-      where:{
-        rentals:{
-          some:{
-            status:"AVAILABLE",
-            appliedUsers:{
-              some:{
-                status:{
-                  not:"APPROVED"
-                }
-              }
-            }
-          }
+export async function GET() {
+  try {
+    const userId = await getUserId();
 
+    if (!userId)
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+
+    const cars = await prisma.car_model.findMany({
+      where: {
+        authorId: {
+          not: userId, // Not posted by current user
         },
-       author:{
-        id:{
-          not:user
-        }
-       },
-      }
-    })
-    console.log(data);
-    return NextResponse.json(data);
-  }catch{
-    console.log('Failed to fetch the data!')
-    return null
+        rentals: {
+          some: {
+            status: "AVAILABLE", // At least one rental available
+            appliedUsers: {
+              every: {
+                status: {
+                  not: "APPROVED", // None are approved yet
+                },
+              },
+            },
+          },
+        },
+      },
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    console.log(cars);
+    return NextResponse.json(cars);
+  } catch (err) {
+    console.error("Failed to fetch cars:", err);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
