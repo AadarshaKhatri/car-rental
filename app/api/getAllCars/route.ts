@@ -19,10 +19,16 @@ export async function GET(){
             name:true,
             id:true,
           }
+        },
+        _count:{
+          select:{
+            rentals:true,
+          }
         }
       },
 
     });
+    console.log("All Cars",data)
     return NextResponse.json(data);
   }catch(error){
     console.log(error);

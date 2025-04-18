@@ -8,6 +8,9 @@ interface AllCarsTypes extends CarModel {
   author:{
     name:string,
     id:string,
+  },
+  _count:{
+    rentals:number,
   }
 }
 
@@ -21,6 +24,7 @@ const RentACar = () => {
     }
     FetchData();
   },[])
+  console.log("Cars",cars);
 
 
   return (
@@ -46,6 +50,7 @@ const RentACar = () => {
                   authorId={car.author.id}
                   key={car.id}
                   id={car.id}
+                  rentals={car._count.rentals}
                   />
                   </div>
                 ))}
