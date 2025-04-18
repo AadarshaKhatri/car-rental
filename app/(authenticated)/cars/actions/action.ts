@@ -88,8 +88,8 @@ export async function createCars(prevState: createCarState, formData: FormData) 
       }
     });
 
-    revalidatePath("/cars","page");
     
+    revalidatePath("/cars","page");
     return { success: true, message: "Car created successfully!", error: null};
   } catch (error) {
     console.error("Error occurred while creating car:")
@@ -118,7 +118,7 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
         message:null,
       }
     }
-    const newRental = await prisma.rental_model.create({
+    await prisma.rental_model.create({
       data:{ 
         status:formData.get("status") as string === "Available" ? "AVAILABLE":"NOT_AVAILABLE",
         author:{
@@ -136,11 +136,10 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
         
       }
     });
-    console.log(newRental);
-  revalidatePath("/cars","page");
+    revalidatePath("/cars","page");
     return {
       success:true,
-      message:null,
+      message:"Rental Created!",
       error:null,
     }
   }catch(error){
@@ -204,6 +203,7 @@ export async function deleteCars(prevState: PrevState, formData: FormData): Prom
       },
     });
 
+    revalidatePath("/cars")
     return {
       success: true,
       error: null,
@@ -258,6 +258,9 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
         }
       }),
     ])
+
+    revalidatePath("/cars")
+
     return { 
       success:true,
       error:null,
@@ -336,7 +339,7 @@ export async function acceptBooking(prevState: PrevState, formData: FormData): P
           },
         }),
       ]);
-
+      revalidatePath("/cars")
       return {
         success: true,
         error: null,
