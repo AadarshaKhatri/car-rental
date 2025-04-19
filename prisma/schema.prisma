@@ -12,7 +12,8 @@ model user_model {
   name          String
   email         String          @unique
   role          UserRoles       @default(USER)
-  password      String
+  password      String?
+  pfp           String?
   cars          car_model[]
   user_boooking booking_model[]
   rentals       rental_model[]

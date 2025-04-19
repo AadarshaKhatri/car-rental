@@ -7,7 +7,6 @@ import { useActionState, useEffect } from "react";
 import { SignUp } from "../action/action";
 import Link from "next/link";
 import { toast } from "sonner";
-import { FcGoogle } from "react-icons/fc";
 
 const SignUpForm = () => {
   const [state, SignUpAction] = useActionState(SignUp, {
@@ -84,13 +83,7 @@ const SignUpForm = () => {
           <div className="flex-grow border-t" />
         </div>
 
-         <Button
-                  variant="outline"
-                  className="w-full flex items-center justify-center gap-2"
-                >
-                  <FcGoogle size={20} />
-                  Sign up with Google
-                </Button>
+      
 
         {/* Redirect to Login */}
         <p className=" mt-6 text-sm text-muted-foreground">

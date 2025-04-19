@@ -8,6 +8,7 @@ const privateRoutes = ["/dashboard/","/carts","/cars"]
 const adminroutes = ["/admin"]
 export async function middleware(req:NextRequest){
 
+  
     const user = await verifySession();
     if (publicroutes.includes(req.nextUrl.pathname) && user.userId && user.role === "USER") {
       return NextResponse.redirect(new URL("/dashboard", req.nextUrl.origin));
