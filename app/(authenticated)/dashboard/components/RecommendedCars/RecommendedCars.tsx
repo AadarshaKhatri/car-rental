@@ -28,7 +28,7 @@ const RecommendedCars = () => {
           <div className="w-full flex flex-col  justify-start items-start gap-5">
             <h2>Recommended Cars for you</h2>
 
-            <div className="flex flex-wrap justify-start items-center gap-5">
+            <div className="flex flex-wrap justify-center items-center md:justify-between md:items-center gap-4">
               {/* Cards Here*/}
               {cars?.map((car) => (
                 <div key={car.id}>

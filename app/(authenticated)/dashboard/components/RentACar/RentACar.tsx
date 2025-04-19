@@ -29,12 +29,12 @@ const RentACar = () => {
 
   return (
     <section className="w-full">
-           <div className="w-full flex flex-col  justify-start items-start gap-5 py-10">
+           <div className="w-full flex flex-col  justify-start items-start gap-5 py-10 px-5 md:px-0">
               <div className="flex py-4">
                <h2>Rent A Car</h2>
               </div>
 
-            <div className="flex flex-wrap justify-between items-center gap-4">
+            <div className="w-full flex flex-wrap justify-center items-center md:justify-between md:items-center gap-4">
               {/* Cards Here*/}
       
               {cars?.map((car) => (
@@ -57,7 +57,7 @@ const RentACar = () => {
                 ))}
             </div>
 
-            <div className="w-full flex justify-center items-center pt-16 pb-2">
+            <div className="w-full flex justify-center items-center pt-16 pb-20 md:pb-2">
               <div className="text-gray-700 px-6 py-1 rounded-xl  text-center">
                 <p className="text-md font-medium text-primary">🚗 You&apos;ve reached the end of the listings.</p>
                 <p className="text-sm mt-1 text-gray-700">More cars will be added soon. Stay tuned!</p>

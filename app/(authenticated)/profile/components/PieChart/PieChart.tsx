@@ -34,7 +34,7 @@ const PieGraph = () => {
 
 
   return (
-    <Card>
+    <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Appication Status</CardTitle>
           </CardHeader>

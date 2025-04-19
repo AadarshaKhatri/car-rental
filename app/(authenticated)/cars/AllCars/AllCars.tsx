@@ -1,37 +1,39 @@
 "use client";
 
 import CarsForRental from "./components/CarsForRental";
-import {  RentRequest } from "./components/FilterForm"
+import { RentRequest } from "./components/FilterForm";
 import RentedCars from "./components/RentedCars";
 
-
-
 const AllCars = () => {
-
   return (
-    <section className="container max-w-full">
-    <div className="w-full flex flex-col justify-center items-center">
-      
-      <div className="relative w-full flex flex-row justify-between items-start gap-5">
-        <div className="w-full flex flex-col justify-center items-center gap-10">
-          <div className="w-full flex-1">
+    <section className="container max-w-full px-5 md:px-8 py-6">
+      <div className="w-full flex flex-col md:flex-row gap-6">
+        
+        {/* Left Section (md+) */}
+        <div className="flex flex-col gap-6 w-full md:w-3/4">
+          {/* Show RentedCars FIRST on small screens */}
+          <div className="block md:hidden order-1">
+            <RentedCars />
+          </div>
+
+          {/* Rent Request Form */}
+          <div className="order-2 md:order-1">
             <RentRequest />
           </div>
-          
-          <div className="w-full">
+
+          {/* Cars For Rental Table */}
+          <div className="order-3 md:order-2">
             <CarsForRental />
           </div>
         </div>
-  
-        {/* Adjusted RentedCars Placement */}
-        <div className="w-[350px] flex flex-col items-end">
+
+        {/* Right Section (RentedCars only on md+) */}
+        <div className="hidden md:block w-full md:w-[350px] md:order-last">
           <RentedCars />
         </div>
       </div>
-    </div>
-  </section>
-  
-  )
-}
+    </section>
+  );
+};
 
-export default AllCars
+export default AllCars;

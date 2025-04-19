@@ -42,7 +42,7 @@ const RentedCars = () => {
 
   return (
     <Link href={`/cars/${rentedCars.map((car) => car.carId)}`}>
-      <div className="w-[350px]">
+      <div className="w-[300px] md:w-[350px]">
         <h2 className="text-lg font-semibold text-center pb-5">Your Rented Cars</h2>
         {rentedCars.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-4 p-6 border border-primary rounded-lg shadow-md">
@@ -57,7 +57,7 @@ const RentedCars = () => {
             {rentedCars.map((rentedCar, index) => (
               <div
                 key={index}
-                className="w-[350px] p-4 shadow-md rounded-lg border border-primary flex items-center gap-3"
+                className="md:w-[350px] p-4 shadow-md rounded-lg border border-primary flex items-center gap-3"
               >
                
                 {rentedCar?.cars.imageUrl ? (
@@ -77,7 +77,7 @@ const RentedCars = () => {
                 )}
 
                 {/* Car Details */}
-                <div className="w-[220px] flex flex-col flex-grow gap-1">
+                <div className="w-[200px] flex flex-col flex-grow gap-1">
                   <h2 className="text-lg font-semibold text-primary">
                     {rentedCar.cars.brand}
                   </h2>

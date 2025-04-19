@@ -76,12 +76,7 @@ const SignUpForm = () => {
           </Button>
         </form>
 
-        {/* Or */}
-        <div className="my-6 flex items-center gap-4 text-muted-foreground text-sm">
-          <div className="flex-grow border-t" />
-          <span>Or</span>
-          <div className="flex-grow border-t" />
-        </div>
+ 
 
       
 

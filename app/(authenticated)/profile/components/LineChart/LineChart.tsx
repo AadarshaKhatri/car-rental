@@ -23,7 +23,7 @@ const LineGraph = () => {
   console.log("Line Chart Data:",data);
 
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-1 md:col-span-2">
     <CardHeader>
       <CardTitle>Monthly Booking Trends</CardTitle>
     </CardHeader>

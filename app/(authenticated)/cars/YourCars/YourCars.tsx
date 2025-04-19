@@ -29,13 +29,13 @@ const YourCars = () => {
           </div>
 
           {/* Right Section - Takes Remaining Space */}
-          <div className="flex-1 min-w-0 flex flex-col">
+          <div className="flex-1 min-w-0 flex flex-col pb-30 md:pb-0">
             <RentCarForm/>
           </div>
         </div>
 
         {/* Collection of Own Cars */}
-        <div className="w-full flex flex-col items-center gap-6">
+        <div className="w-full hidden md:flex flex-col items-center gap-6">
           <div className="w-full">
             <h3 className="text-2xl font-semibold text-white">Your Cars</h3>
           </div>

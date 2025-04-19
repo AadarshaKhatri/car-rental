@@ -72,10 +72,10 @@ export function RentRequest() {
             <TableRow className="text-left border-muted">
               <TableHead className="table-padding">ID</TableHead>
               <TableHead className="table-padding">Car Name</TableHead>
-              <TableHead className="table-padding">Start Date</TableHead>
-              <TableHead className="table-padding">End Date</TableHead>
+              <TableHead className="table-padding hidden md:table-cell">End Date</TableHead>
+              <TableHead className="table-padding hidden md:table-cell">Start Date</TableHead>
               <TableHead className="table-padding">Applied User</TableHead>
-              <TableHead className="table-padding">Status</TableHead>
+              <TableHead className="table-padding hidden md:table-cell">Status</TableHead>
               <TableHead className="table-padding">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -86,7 +86,7 @@ export function RentRequest() {
                   <TableRow key={index} className="border-b transition">
                     <TableCell className="table-padding">{index + 1}</TableCell>
                     <TableCell className="table-padding">{booking.rentals.car.brand ? booking.rentals.car.brand : "N/A"}</TableCell>
-                    <TableCell className="table-padding">
+                    <TableCell className="table-padding hidden md:table-cell">
                       {booking.rentals.startDate
                         ? new Date(booking.rentals.startDate).toLocaleDateString("en-GB", {
                             day: "numeric",
@@ -95,7 +95,7 @@ export function RentRequest() {
                           })
                         : "N/A"}
                     </TableCell>
-                    <TableCell className="table-padding">
+                    <TableCell className="table-padding hidden md:table-cell">
                       {booking.rentals.endDate
                         ? new Date(booking.rentals.endDate).toLocaleDateString("en-GB", {
                             day: "numeric",
@@ -105,7 +105,7 @@ export function RentRequest() {
                         : "N/A"}
                     </TableCell>
                     <TableCell className="table-padding">{booking.applicant.name}</TableCell>
-                    <TableCell className="table-padding">{booking.status}</TableCell>
+                    <TableCell className="table-padding hidden md:table-cell">{booking.status}</TableCell>
                     <TableCell className="flex gap-3 table-padding">
                       <form action={accpetBookingAction} className="flex gap-4">
                         <Input type="hidden" name="carId" defaultValue={booking.rentals.car.id} />

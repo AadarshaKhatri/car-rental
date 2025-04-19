@@ -18,7 +18,7 @@ const CarPerformance = () => {
     FetchData();
   }, []);
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-1 md:col-span-2">
       <CardHeader>
       <CardTitle>Cars Categorized by Manufactured Year</CardTitle>
       </CardHeader>

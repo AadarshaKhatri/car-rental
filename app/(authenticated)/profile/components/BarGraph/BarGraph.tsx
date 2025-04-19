@@ -22,7 +22,7 @@ const BarGraph = () => {
   },[])
 
   return (
-    <Card>
+    <Card className="col-span-1">
     <CardHeader>
       <CardTitle>Car Transmission Types</CardTitle>
     </CardHeader>

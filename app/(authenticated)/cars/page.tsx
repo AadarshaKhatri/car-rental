@@ -17,11 +17,11 @@ const CarsPage = () => {
         <div className="w-full overflow-hidden">
           <div className=" flex flex-col justify-between items-center">
 
-            <div className="w-full flex flex-row justify-between items-center">
+            <div className="w-full flex flex-row justify-center md:justify-between items-center ">
 
               {/* Choose Between the Cars */}
-              <div className="flex justify-center items-center gap-5">
-              <div className="flex flex-row justify-between pb-5">
+              <div className="flex justify-center items-center ">
+              <div className="flex flex-row justify-between items-center gap-10 md:gap-5 pb-5">
                   {["Rent Cars", "Your Cars"].map((tab) => (
                     <div
                       key={tab}

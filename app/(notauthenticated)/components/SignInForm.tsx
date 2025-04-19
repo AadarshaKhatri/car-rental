@@ -66,14 +66,6 @@ const SignInForm = () => {
           </Button>
         </form>
 
-        {/* Google Auth */}
-        <div className="my-6 flex items-center gap-4 text-muted-foreground text-sm">
-          <div className="flex-grow border-t" />
-          <span>Or</span>
-          <div className="flex-grow border-t" />
-        </div>
-
-        
 
         {/* Bottom Sign Up */}
         <p className="mt-6 text-sm text-muted-foreground">
