@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user_model {
+  id            String          @id @default(uuid())
+  name          String
+  email         String          @unique
+  role          UserRoles       @default(USER)
+  password      String?
+  pfp           String?
+  cars          car_model[]
+  user_boooking booking_model[]
+  rentals       rental_model[]
+  appliedUsers  applied_users[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model car_model {
+  id           String          @id @default(uuid())
+  no_seats     Int
+  brand        String
+  year         Int
+  transmission String
+  pricePerDay  Float
+  mileage      Int
+  imageUrl     String?
+  rentals      rental_model[]
+  booking      booking_model[]
+  author       user_model      @relation(fields: [authorId], references: [id])
+  authorId     String
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+model rental_model {
+  id           String          @id @default(uuid())
+  author       user_model      @relation(fields: [authorId], references: [id])
+  authorId     String
+  car          car_model       @relation(fields: [carId], references: [id])
+  carId        String
+  status       CarStatus       @default(AVAILABLE)
+  startDate    DateTime
+  endDate      DateTime
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  bookedBy     booking_model[]
+  appliedUsers applied_users[]
+}
+
+model applied_users {
+  id       String       @id @default(uuid())
+  rentals  rental_model @relation(fields: [rentalId], references: [id])
+  rentalId String
+  applicant     user_model   @relation(fields: [applicantId], references: [id])
+  applicantId   String
+  status   RentalStatus @default(NOT_APPLIED)
+  appliedAt DateTime @default(now())
+
+}
+
+model booking_model {
+  id           String        @id @default(uuid())
+  booked_user  user_model?   @relation(fields: [bookedUserID], references: [id])
+  bookedUserID String?
+  rents        rental_model? @relation(fields: [rentalId], references: [id])
+  rentalId     String?
+  cars         car_model?    @relation(fields: [carId], references: [id])
+  carId        String?
+  createdAt    DateTime        @default(now())
+}
+
+enum CarStatus {
+  AVAILABLE
+  RENTED
+  NOT_AVAILABLE
+}
+
+enum RentalStatus {
+  NOT_APPLIED
+  PENDING
+  APPROVED
+}
+
+enum UserRoles {
+  USER
+  ADMIN
+}

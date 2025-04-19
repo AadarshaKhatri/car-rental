@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "booking_model" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

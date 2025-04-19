@@ -1,103 +1,97 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main className="min-h-screen font-sans font-stretch-95%">
+      {/* Hero Section */}
+      <section className="container mx-auto w-full h-screen flex flex-col justify-center items-center text-center gap-6">
+        <h1 className="text-4xl md:text-7xl font-bold max-w-3xl leading-tight">
+           Rental Management System
+        </h1>
+        <p className="max-w-xl text-md text-gray-600">
+          A complete web-based solution to manage car rentals efficiently—covering everything
+          from fleet management to customer booking and analytics.
+        </p>
+        <div className="flex gap-10">
+          <Button className="py-6 px-7" variant="default">
+            <Link href="/signup" className=" text-lg ">Get Started</Link>
+          </Button>
+          <Button variant="outline" className="py-6 px-7">
+            <Link href="/login" className="text-lg">Sign In</Link>
+          </Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* Features Grid */}
+      <section className="container mx-auto px-6 py-20">
+        <h2 className="text-3xl font-semibold text-center mb-6">
+          Key Features
+        </h2>
+        <p className="text-center text-gray-400 max-w-2xl mx-auto mb-12">
+          The system includes all the essential modules to streamline car rental operations.
+        </p>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              title: "Marketplace",
+              desc: "Add, edit, and manage all available cars with image uploads, categories, and availability control.",
+            },
+            {
+              title: "Customer Bookings",
+              desc: "Allow users to browse and book cars with transparent availability and pricing.",
+            },
+            {
+              title: "Recommendation System",
+              desc: "Get personalized car recommendations after completing five successful rentals.",
+            },
+            {
+              title: "Choose Driver",
+              desc: "Customers can choose drivers while booking. Admin can also assign drivers manually.",
+            },
+            {
+              title: "Car Records",
+              desc: "Maintain detailed service and maintenance logs for every car in the system.",
+            },
+            {
+              title: "Analytics Dashboard",
+              desc: "View rental trends, revenue stats, user behavior, and performance metrics.",
+            },
+          ].map((feature, index) => (
+            <div
+              key={index}
+              className="bg-[#141414] p-6 rounded-xl shadow-md border border-[#2a2a2a]"
+            >
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p className="text-gray-400 text-sm">{feature.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Tech Stack (Optional) */}
+      <section className="container mx-auto px-6 py-12 max-w-4xl text-center">
+        <h2 className="text-3xl font-semibold mb-4">Tech Stack Used</h2>
+        <p className="text-gray-600 text-md mb-6">
+          Built with modern tools to ensure scalability, security, and ease of use.
+        </p>
+        <div className="flex justify-center flex-wrap gap-6 text-gray-300 text-sm">
+          <span className="bg-primary text-background px-4 py-2 rounded-full">Next.js</span>
+          <span className="bg-primary text-background px-4 py-2 rounded-full">Tailwind CSS</span>
+          <span className="bg-primary text-background px-4 py-2 rounded-full">Prisma</span>
+          <span className="bg-primary text-background px-4 py-2 rounded-full">Supabase</span>
+          <span className="bg-primary text-background px-4 py-2 rounded-full">ShadCn</span>
+          <span className="bg-primary text-background px-4 py-2 rounded-full">Recharts</span>
+          <span className="bg-primary text-background px-4 py-2 rounded-full">Axios</span>
+
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black text-gray-500 text-center py-6 mt-10 text-sm">
+        © {new Date().getFullYear()}. All rights reserved.
       </footer>
-    </div>
+    </main>
   );
 }
