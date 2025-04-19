@@ -8,6 +8,7 @@ import { useActionState, useEffect } from "react";
 import { SignIn } from "../action/action";
 import { toast } from "sonner";
 import { FcGoogle } from "react-icons/fc"; // Google Icon
+import GoogleSignInButton from "./GoogleSignIn";
 
 const SignInForm = () => {
   const [state, SignInAction] = useActionState(SignIn, {
@@ -81,6 +82,7 @@ const SignInForm = () => {
           <FcGoogle size={20} />
           Continue with Google
         </Button>
+        <GoogleSignInButton/>
 
         {/* Bottom Sign Up */}
         <p className="mt-6 text-sm text-muted-foreground">

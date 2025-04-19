@@ -1,19 +1,13 @@
-"use client"
+"use client";
 
-
-
-const NavigationBar = () => {
-
-
+const Navbar = () => {
   return (
-    <section className="py-6">
-      <div className="flex flex-row justify-end items-center">
-        This is from Navigation Bar
+    <nav className="w-full py-4 bg-black text-white shadow-md">
+      <div className="hidden max-w-7xl mx-auto  items-center justify-between">
+        <h1 className="text-xl font-semibold text-primary tracking-wide">Welcome Back, User!</h1>
       </div>
-
- 
-    </section>
+    </nav>
   );
-}
+};
 
-export default NavigationBar;
+export default Navbar;
