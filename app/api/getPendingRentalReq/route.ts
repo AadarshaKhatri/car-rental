@@ -38,11 +38,16 @@ export async function GET (){
 
       }
     })
-    console.log("Request", JSON.stringify(data, null, 2));
 
     return NextResponse.json(data);
   }catch(error){
     console.log("Error Fetching the data",error)
-    return null
+    return NextResponse.json({
+      message:"Failed to Fetch the data",
+    },
+    {
+      status:500
+    }
+  )
   }
 }

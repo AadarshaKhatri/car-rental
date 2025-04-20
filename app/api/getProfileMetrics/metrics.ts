@@ -5,7 +5,6 @@ import prisma from "@/lib/prisma";
 
 
 export default async function Metrics(){
-  console.log("Metrics Hit!");
   try{
   const userId = await getUserId();
   const now = new Date();
@@ -52,8 +51,14 @@ export default async function Metrics(){
     where: {
       createdAt:{
         gte:startOfThisMonth
-      }
+      },
+      rents:{
+        status:"RENTED",
+        authorId:String(userId),
+      },
+      
     }
+    
   })
 
   const bookingPreviousMonth = await prisma.booking_model.count({
@@ -61,6 +66,9 @@ export default async function Metrics(){
       createdAt:{
         gte:startOfLastMonth,
         lt:startOfThisMonth
+      },
+      rents:{
+        status:"RENTED",
       }
     }
   })
@@ -97,7 +105,6 @@ export default async function Metrics(){
     ? totalRevenue / rentals.length
     : 0;
 
-  console.log("Cars:",TotalCars);
     
   return {TotalCars, TotalAvailableCars,TotalRentals,OngoingRentals,bookingsThisMonth,percentage_change,totalRevenue,averageRevenuePerRental}
   }

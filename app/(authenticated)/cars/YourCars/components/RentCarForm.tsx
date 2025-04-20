@@ -63,7 +63,7 @@ const RentCarForm = () => {
         
         <Select onValueChange={(value) => setCarId(value)} required>
           <SelectTrigger className="w-full py-6 bg-gray-800 text-white border border-muted rounded-md">
-            <SelectValue placeholder="Your Available Cars" />
+            <SelectValue placeholder="Your Cars" />
           </SelectTrigger>
           <SelectContent className="w-full bg-gray-900 border border-muted rounded-md shadow-lg">
             <SelectGroup>
@@ -111,7 +111,7 @@ const RentCarForm = () => {
 
           {/* Hidden Input to store transmission value */}
           <Input type="text" className="hidden" value={status} name="status" readOnly />
-        <Button>Create Car</Button>
+        <Button>Create Rental</Button>
       </form>
     </div>
   </section>

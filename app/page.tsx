@@ -6,7 +6,7 @@ export default function Home() {
     <main className="min-h-screen font-sans font-stretch-95%">
       {/* Hero Section */}
       <section className="container mx-auto w-full h-screen flex flex-col justify-center items-center text-center gap-6">
-        <h1 className="text-4xl md:text-7xl font-bold max-w-3xl leading-tight">
+        <h1 className="text-primary text-4xl md:text-7xl font-bold max-w-3xl leading-tight">
            Rental Management System
         </h1>
         <p className="max-w-xl text-md text-gray-600">

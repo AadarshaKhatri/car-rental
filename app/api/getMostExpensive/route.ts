@@ -17,11 +17,16 @@ export async function GET(){
         pricePerDay:true,
       }
     });
-    console.log("Expe:",cars);
     return NextResponse.json(cars);
 
   }catch(error){
     console.log(error);
-    return null;
+    return NextResponse.json({
+      message:"Failed to Fetch the data",
+    },
+    {
+      status:500
+    }
+  )
   }
 }

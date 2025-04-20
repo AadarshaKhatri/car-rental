@@ -40,10 +40,15 @@ export async function GET(){
         },
       }
     });
-    console.log(data);
     return NextResponse.json(data);
 
   }catch{
-    return null
+    return NextResponse.json({
+      message:"Failed to Fetch the data",
+    },
+    {
+      status:500
+    }
+  )
   }
 }

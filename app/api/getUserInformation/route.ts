@@ -16,6 +16,12 @@ export async function GET(){
     return NextResponse.json(data);
   }catch(error){
     console.log(error);
-    return null
+    return NextResponse.json({
+      message:"Failed to Fetch the data",
+    },
+    {
+      status:500
+    }
+  )
   }
 }

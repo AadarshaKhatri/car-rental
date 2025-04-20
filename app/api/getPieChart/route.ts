@@ -19,7 +19,6 @@ export async function GET() {
       { name: "Rented", value: rented },
     ];
 
-    console.log("Pie Data", data);
     return NextResponse.json(data);
 
   } catch (error) {

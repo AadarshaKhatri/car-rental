@@ -33,7 +33,8 @@ const CarsForRental = () => {
   console.log("Cars Avaliable for Rental",rentalCars)
   return (
     <section className="w-full pb-20">
-       <div className="mt-5 w-full flex flex-wrap justify-evenly items-start gap-12">
+        <h2 className="mt-2 text-2xl pb-5">Rent More Cars....</h2>
+       <div className="mt-5 w-full flex flex-wrap justify-center items-center gap-12">
             {
               rentalCars?.length === 0 ? 
               <div className="">
@@ -53,6 +54,7 @@ const CarsForRental = () => {
                 year={rentalCar.year}
                 authorId={rentalCar.authorId}
                 rentals={rentalCar._count.rentals}
+                imageUrl={rentalCar.imageUrl}
 
               />
                 

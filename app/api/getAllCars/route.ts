@@ -28,10 +28,17 @@ export async function GET(){
       },
 
     });
-    console.log("All Cars",data)
-    return NextResponse.json(data);
+      
+    const shuffledData = data.sort(() => Math.random() - 0.5);
+    return NextResponse.json(shuffledData);
   }catch(error){
     console.log(error);
-    return null
+    return NextResponse.json({
+      message:"Failed to Fetch the data",
+    },
+    {
+      status:500
+    }
+  )
   }
 }

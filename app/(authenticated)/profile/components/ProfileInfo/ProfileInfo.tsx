@@ -64,7 +64,6 @@ const ProfileInfo = () => {
     }
     FetchData();
   },[])
-  console.log(metrics);
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
     {metrics?.map(({ title, value, badge, icon, textColor }, i) => (

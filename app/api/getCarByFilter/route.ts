@@ -3,8 +3,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  console.log("Car By Filter API Hit!");
-  try {
+    try {
     const userId = await getUserId();
     if (!userId) return NextResponse.json({ message: "Not Authorized" });
 

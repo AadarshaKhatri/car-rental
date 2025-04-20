@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 
 export async function GET(){
-  console.log("API Most Rented Car Hit!")  
   try{
     const cars = await prisma.car_model.findMany({
       orderBy: {
@@ -17,10 +16,15 @@ export async function GET(){
       },
     });
 
-    console.log("Rentals Count:",cars);
     return NextResponse.json(cars);
   }catch(error){
     console.log(error);
-    return null
+    return NextResponse.json({
+      message:"Failed to Fetch the data",
+    },
+    {
+      status:500
+    }
+  )
   }
 }
