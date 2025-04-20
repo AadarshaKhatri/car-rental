@@ -15,7 +15,7 @@ export async function GET() {
         textColor: "text-green-600"
       },
       {
-        title: "Total Rentals",
+        title: "Total Rentals Created",
         value: TotalRentals,
         badge: `${OngoingRentals} ongoing rentals`,
         icon: "users",

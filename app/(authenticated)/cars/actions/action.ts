@@ -27,8 +27,6 @@ interface uploadFileResponse{
 
 // ================ Server Action to Create Cars =========================
 export async function createCars(prevState: createCarState, formData: FormData) : Promise<createCarState>{
-  console.log("Car Create Hit!");
-  console.log("FormData",formData);
   try {
     const { success, error } = CarSchema.safeParse({
       no_seats: Number(formData.get("no_seats") as string),
@@ -93,7 +91,6 @@ export async function createCars(prevState: createCarState, formData: FormData) 
     return { success: true, message: "Car created successfully!", error: null};
   } catch (error) {
     console.error("Error occurred while creating car:")
-    console.log(`${error}`)
     return {
       ...prevState,
       success: false,
@@ -107,8 +104,6 @@ export async function createCars(prevState: createCarState, formData: FormData) 
 
 export async function createRentals (prevState:PrevState,formData:FormData) : Promise<PrevState>{
 
-  console.log("Car Rental Hit")
-  console.log("Rental Form Data:", formData);
   try{
     const user = await getUserId();
     if(!user){
@@ -142,8 +137,7 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
       message:"Rental Created!",
       error:null,
     }
-  }catch(error){
-    console.log("Error while creating the car for rental",error);
+  }catch{
     return{
       success:false,
       message:null,
@@ -155,8 +149,6 @@ export async function createRentals (prevState:PrevState,formData:FormData) : Pr
 
 // ======================= Server Action to Delete Cars ==========================
 export async function deleteCars(prevState: PrevState, formData: FormData): Promise<PrevState> {
-  console.log("Delete Data Hit!");
-  console.log("Delete Form Data", formData);
 
   try {
     // Finding all rentals for the car before deleting
@@ -195,7 +187,6 @@ export async function deleteCars(prevState: PrevState, formData: FormData): Prom
     })
     if(cars?.imageUrl) {
       await deleteImages(cars?.imageUrl);
-      console.log(await deleteImages(cars?.imageUrl))
     }
     await prisma.car_model.delete({
       where: {
@@ -209,8 +200,7 @@ export async function deleteCars(prevState: PrevState, formData: FormData): Prom
       error: null,
       message: "Car and related data deleted successfully",
     };
-  } catch (error) {
-    console.log(`Error: ${error}`);
+  } catch{
     return {
       success: false,
       message: null,
@@ -222,8 +212,6 @@ export async function deleteCars(prevState: PrevState, formData: FormData): Prom
 
 // ======================= Server Action to creat Bookings ==========================
 export async function bookforRental(prevState:PrevState,formData:FormData) : Promise<PrevState> {
-  console.log('Book Rental Hit!');
-  console.log("Booking Rental Form Data:",formData);
   try{
     const user = await getUserId();
     if(!user){
@@ -267,9 +255,7 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
       message:"Your request for rental has been applied!"
     }
 
-  }catch(error){
-    console.log(`${error}`);
-    console.log("Erorr from Book Rental: ",error);
+  }catch{
     return {
       success:false,
       message:null,
@@ -281,8 +267,6 @@ export async function bookforRental(prevState:PrevState,formData:FormData) : Pro
 
 // ======================= Server Action to Accept the Booking ==========================
 export async function acceptBooking(prevState: PrevState, formData: FormData): Promise<PrevState> {
-  console.log("Accept Booking Hit!");
-  console.log("Accept Booking Form Data:", formData);
 
   try {
     const user = await getUserId();
@@ -360,8 +344,7 @@ export async function acceptBooking(prevState: PrevState, formData: FormData): P
         message: "Request Rejected",
       };
     }
-  } catch (error) {
-    console.log("Error", error);
+  } catch  {
     return {
       success: false,
       error: "Failed to accept the booking!",
@@ -372,7 +355,6 @@ export async function acceptBooking(prevState: PrevState, formData: FormData): P
 
 
 export async function imageUploader(file:File) : Promise<uploadFileResponse>{
-  console.log("Image Uploader!")
   try {
     if (!file) {
       return {
@@ -393,7 +375,6 @@ export async function imageUploader(file:File) : Promise<uploadFileResponse>{
       });
 
     if (error) {
-      console.log(`${error.message}`)
       return {
         message:error.message,
         success: false,
@@ -403,7 +384,6 @@ export async function imageUploader(file:File) : Promise<uploadFileResponse>{
 
     // Get public URL
     const url = supabase.storage.from("images").getPublicUrl(data.path);
-    console.log("Url here: ", data);
     if (!url) {
       return {
        
@@ -432,7 +412,6 @@ export async function deleteImages(imageUrl: string) {
     const decodedImageUrl = decodeURIComponent(imageUrl);
     const imagePath = decodedImageUrl.split('/public/images/')[1];  // Extract the image path after /public/images/
 
-    console.log("Decoded Image Url Being Deleted:", imagePath);
 
     // Log the image path to verify it's correct
     if (!imagePath) {
@@ -444,9 +423,8 @@ export async function deleteImages(imageUrl: string) {
     }
 
     // Try to remove the image from the storage bucket
-    const { error,data } = await supabase.storage.from("images").remove([`${imagePath}`]);
+    const { error } = await supabase.storage.from("images").remove([`${imagePath}`]);
 
-    console.log(data);
     // Check if there is an error during the remove operation
     if (error) {
       return {

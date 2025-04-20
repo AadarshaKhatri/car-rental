@@ -6,7 +6,7 @@ export async function GET() {
   try {
 
     const userId = await getUserId();
-    
+    if (!userId) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     const data = await prisma.booking_model.findMany({
       where:{
         bookedUserID:userId
@@ -25,7 +25,6 @@ export async function GET() {
       return { month, no_of_Booking };
     });
 
-    console.log("Line Chart Data:",sendingData);
     return NextResponse.json(sendingData);
 
   } catch (error) {

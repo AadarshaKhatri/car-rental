@@ -22,22 +22,12 @@ async function deleteExpiredRentals() {
 
     if (expiredRentals.length === 0) return; 
 
-    const carIds = expiredRentals.map((rental) => rental.carId);
-
     await prisma.rental_model.deleteMany({
       where: {
         id: { in: expiredRentals.map((rental) => rental.id) },
       },
     });
 
-    await prisma.car_model.updateMany({
-      where: {
-        id: { in: carIds },
-      },
-      data: {
-        status: "AVAILABLE",
-      },
-    });
 
   } catch (error) {
     console.error("Error deleting expired rentals:", error);

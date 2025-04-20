@@ -42,7 +42,6 @@ export async function GET() {
       },
     });
 
-    console.log("RentalCars",cars);
     return NextResponse.json(cars);
   } catch (err) {
     console.error("Failed to fetch cars:", err);

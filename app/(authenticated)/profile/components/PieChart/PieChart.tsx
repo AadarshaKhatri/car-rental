@@ -20,7 +20,6 @@ const PieGraph = () => {
     }
     FetchData();
   },[])
-  console.log("Piec Chart Data",data);
 
   const COLORS = [
     "#60A5FA", // your primary blue

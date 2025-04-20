@@ -78,7 +78,7 @@ const CarDetails = ({ id }: { id: string }) => {
       <Card className="w-full rounded-lg border-0 md:px-20">
         <CardContent className="flex flex-col md:flex-row gap-10 p-6">
           {/* Image Placeholder */}
-          <div className="w-full md:w-[490px] h-72 bg-gray-700 rounded-lg flex items-center justify-center">
+          <div className="w-full md:w-[490px] h-72  rounded-lg flex items-center justify-center">
             
             {
               cars?.imageUrl ? 
@@ -89,7 +89,7 @@ const CarDetails = ({ id }: { id: string }) => {
                   width={100}
                   priority={true}
                   quality={100}
-                  className="w-full md:w-[890px] h-72 flex items-center justify-center"
+                  className="w-full md:w-[890px] h-72 flex items-center justify-center object-cover"
             />
               :
               null
@@ -136,49 +136,46 @@ const CarDetails = ({ id }: { id: string }) => {
             {
               cars?.authorId !== id  ?
               (
-                cars?.rentals ? (
-                <>
-                  <p className="text-sm text-gray-300 mt-2">
-                    Available Rental Dates:
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-
-                    {cars.rentals.map((rental) => (
-                      rental.status === "AVAILABLE" ?
-                      <div
-                        key={rental.id}
-                        onClick={() => handleTabSelect(rental.id)}
-                        className={`py-2 px-4 rounded-md text-sm cursor-pointer transition-colors ${
-                          selectedRentalId === rental.id
-                            ? "bg-primary text-background"
-                            : "bg-gray-800 text-white"
-                        }`}
-                      >
-                        {new Date(rental.startDate).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}{" "}
-                        -{" "}
-                        {new Date(rental.endDate).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
+                cars?.rentals && (
+                  <>
+                    <p className="text-sm text-gray-300 mt-2">
+                      Available Rental Dates:
+                    </p>
+              
+                    {cars.rentals.some(rental => rental.status === "AVAILABLE") ? (
+                      <div className="flex flex-wrap gap-3">
+                        {cars.rentals.map((rental) =>
+                          rental.status === "AVAILABLE" ? (
+                            <div
+                              key={rental.id}
+                              onClick={() => handleTabSelect(rental.id)}
+                              className={`py-2 px-4 rounded-md text-sm cursor-pointer transition-colors ${
+                                selectedRentalId === rental.id
+                                  ? "bg-primary text-background"
+                                  : "bg-gray-800 text-white"
+                              }`}
+                            >
+                              {new Date(rental.startDate).toLocaleDateString("en-GB", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              })}{" "}
+                              -{" "}
+                              {new Date(rental.endDate).toLocaleDateString("en-GB", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              })}
+                            </div>
+                          ) : null
+                        )}
                       </div>
-                      :
-                      <div key={rental.id}>
-                         <p className="text-sm text-red-200 mt-2">
-                          No dates available.
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </>
-                 ) : (
-                  <p className="text-sm text-gray-400 mt-2">
-                    No rental options available.
-                  </p>
+                    ) : (
+                      <p className="text-sm text-red-200 mt-2">
+                        No rental dates available at the moment.
+                      </p>
+                    )}
+                  </>
                 )
               )
               :
@@ -235,7 +232,7 @@ const CarDetails = ({ id }: { id: string }) => {
             {/* Price and Booking */}
             <div className="flex justify-between items-center mt-6">
               <p className="text-lg font-semibold text-white">
-                Rs {cars?.pricePerDay} / per hour
+                Rs {cars?.pricePerDay} / per day
               </p>
               {
                 cars?.authorId === id ? 

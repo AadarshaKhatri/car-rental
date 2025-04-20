@@ -35,7 +35,7 @@ export async function SignIn (prevState:PrevState,formData : FormData) : Promise
         message:null,
       }
     }
-    const isPasswordMatch = await verifyPassword(formData.get("password") as string,FoundUser.password);
+    const isPasswordMatch = await verifyPassword(formData.get("password") as string, String(FoundUser.password));
     if(!isPasswordMatch){
       return{
         success:false,

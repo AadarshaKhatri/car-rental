@@ -61,7 +61,7 @@ const RentedCars = () => {
               >
                
                 {rentedCar?.cars.imageUrl ? (
-                <div className="w-40 h-16 bg-secondary rounded-md flex items-center justify-center">
+                <div className="w-40 h-16  rounded-md flex items-center justify-center">
                   <Image
                     src={`${rentedCar?.cars?.imageUrl}`}
                     alt="Car Image"
@@ -69,7 +69,7 @@ const RentedCars = () => {
                     width={10}
                     priority={true}
                     quality={100}
-                    className="w-full md:w-full h-full rounded-md flex items-center justify-center"
+                    className="w-full md:w-full h-full rounded-md flex items-center justify-center object-fit"
                   />
                 </div>
                 ) : (

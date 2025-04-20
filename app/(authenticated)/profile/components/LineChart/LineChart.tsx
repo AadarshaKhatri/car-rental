@@ -20,7 +20,6 @@ const LineGraph = () => {
     FetchData();
   },[])
 
-  console.log("Line Chart Data:",data);
 
   return (
     <Card className="col-span-1 md:col-span-2">

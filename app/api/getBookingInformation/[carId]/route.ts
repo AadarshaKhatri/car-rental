@@ -53,6 +53,12 @@ export async function GET (  request: Request,
     return NextResponse.json(data);
   }catch(error){
     console.log("Error while fetching",error);
-    return null
+    return NextResponse.json({
+      message:"Failed to Fetch the data",
+    },
+    {
+      status:500
+    }
+  )
   }
 }

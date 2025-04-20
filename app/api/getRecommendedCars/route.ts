@@ -65,7 +65,13 @@ export async function GET() {
     return NextResponse.json([]);
   } catch (error) {
     console.log("Recommendation error:", error);
-    return null
+    return NextResponse.json({
+      message:"Failed to Fetch the data",
+    },
+    {
+      status:500
+    }
+  )
   }
 }
 
