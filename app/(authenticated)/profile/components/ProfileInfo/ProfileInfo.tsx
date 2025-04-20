@@ -64,7 +64,7 @@ const ProfileInfo = () => {
     }
     FetchData();
   },[])
-  return (
+    return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
     {metrics?.map(({ title, value, badge, icon, textColor }, i) => (
       <Card key={i} className="flex flex-col gap-4">
